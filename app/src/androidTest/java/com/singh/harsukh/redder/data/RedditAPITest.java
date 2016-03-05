@@ -22,13 +22,7 @@ import retrofit2.Retrofit;
 public class RedditAPITest extends TestCase {
 
     public void testMultipleSubreddits() {
-        testGetPostsFromSubreddit("all");
         testGetPostsFromSubreddit("android");
-        testGetPostsFromSubreddit("askreddit");
-        testGetPostsFromSubreddit("tifu");
-        testGetPostsFromSubreddit("NSFW_GIF");
-        testGetPostsFromSubreddit("aww");
-        testGetPostsFromSubreddit("gifs");
     }
 
     public void testGetPostsFromSubreddit(String subreddit) {
@@ -70,10 +64,28 @@ public class RedditAPITest extends TestCase {
                     } else {
                         System.out.println("Post from " + post.getData().getSubreddit() + " came through");
                     }
+                    try {
+                        testGetCommentsFromPost(post.getData().getSubreddit(), post.getData().getId());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void testGetCommentsFromPost(String nameOfSubreddit, String articleID)
+            throws Exception {
+        Retrofit retrofit = BaseRetrofitImplementation.initRetrofit();
+        RedditAPI redditAPI = retrofit.create(RedditAPI.class);
+        Call<List<Listing>> call = redditAPI.getCommentsFromPost(nameOfSubreddit, articleID);
+        try {
+            Response<List<Listing>> response = call.execute();
+            assertTrue(response.isSuccess());
+        } catch (IOException e){
             e.printStackTrace();
         }
     }
