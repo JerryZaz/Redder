@@ -39,9 +39,6 @@ public class SectionsFragment extends android.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
-
         section = new ArrayList<>();
         section.add(getString(R.string.title_section1));
         section.add(getString(R.string.title_section2));
@@ -63,13 +60,6 @@ public class SectionsFragment extends android.app.Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
         recyclerView.setAdapter(sectionAdapter);
         return v;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
