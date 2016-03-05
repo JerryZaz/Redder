@@ -18,24 +18,31 @@ import retrofit2.Retrofit;
 
 /**
  * Created by Henry on 3/4/2016.
- *
  */
 public class RedditAPITest extends TestCase {
 
-    public void testGetPostsFromSubreddit(){
+    public void testMultipleSubreddits() {
+        testGetPostsFromSubreddit("all");
+        testGetPostsFromSubreddit("android");
+        testGetPostsFromSubreddit("askreddit");
+        testGetPostsFromSubreddit("tifu");
+        testGetPostsFromSubreddit("NSFW_GIF");
+        testGetPostsFromSubreddit("aww");
+        testGetPostsFromSubreddit("gifs");
+    }
 
-        final String SUBREDDIT = "android";
+    public void testGetPostsFromSubreddit(String subreddit) {
 
         RedditAPI redditAPI = BaseRetrofitImplementation.initRetrofit().create(RedditAPI.class);
 
-        Call<Listing> call = redditAPI.getPostsFromSubreddit(SUBREDDIT);
+        Call<Listing> call = redditAPI.getPostsFromSubreddit(subreddit);
 
         try {
             Response<Listing> response = call.execute();
 
             try {
                 assertTrue(response.code() == 200);
-            } catch (AssertionError e){
+            } catch (AssertionError e) {
                 System.err.println("Response status code: " + response.code());
             }
 
@@ -48,20 +55,20 @@ public class RedditAPITest extends TestCase {
             }
 
             Listing decodedResponse = response.body();
-            if(decodedResponse != null){
+            if (decodedResponse != null) {
                 try {
                     assertEquals("Listing", decodedResponse.getKind());
-                } catch (AssertionError e){
+                } catch (AssertionError e) {
                     System.err.println("Response kind: " + decodedResponse.getKind());
                 }
 
                 List<ChildrenEntity> posts = decodedResponse.getData().getChildren();
-                for(ChildrenEntity post : posts){
+                for (ChildrenEntity post : posts) {
                     System.out.println("Fetched post title: " + post.getData().getTitle());
-                    try {
-                        assertEquals(SUBREDDIT, post.getData().getSubreddit().toLowerCase());
-                    } catch (AssertionError e){
-                        System.err.println("Post from " + post.getData().getSubreddit() + " came through");
+                    if (!subreddit.equals("all")) {
+                        assertEquals(subreddit.toLowerCase(), post.getData().getSubreddit().toLowerCase());
+                    } else {
+                        System.out.println("Post from " + post.getData().getSubreddit() + " came through");
                     }
                 }
             }
@@ -71,8 +78,8 @@ public class RedditAPITest extends TestCase {
         }
     }
 
-    public abstract static class BaseRetrofitImplementation{
-        static Retrofit initRetrofit(){
+    public abstract static class BaseRetrofitImplementation {
+        static Retrofit initRetrofit() {
 
             final String BASE_URL = BuildConfig.BASE_REDDIT_URL;
 

@@ -114,7 +114,7 @@ public class Listing {
                 private String thumbnail;
                 private String subreddit_id;
                 private boolean hide_score;
-                private boolean edited;
+                private String edited;
                 private Object link_flair_css_class;
                 private String author_flair_css_class;
                 private int downs;
@@ -140,6 +140,14 @@ public class Listing {
                 private int ups;
                 private List<?> user_reports;
                 private List<?> mod_reports;
+
+                public String getEdited() {
+                    return edited;
+                }
+
+                public void setEdited(String edited) {
+                    this.edited = edited;
+                }
 
                 public String getDomain() {
                     return domain;
@@ -339,14 +347,6 @@ public class Listing {
 
                 public void setHide_score(boolean hide_score) {
                     this.hide_score = hide_score;
-                }
-
-                public boolean isEdited() {
-                    return edited;
-                }
-
-                public void setEdited(boolean edited) {
-                    this.edited = edited;
                 }
 
                 public Object getLink_flair_css_class() {
