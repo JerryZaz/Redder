@@ -1,4 +1,4 @@
-package com.singh.harsukh.redder;
+package com.singh.harsukh.redder.fragment;
 
 
 import android.content.Context;
@@ -9,6 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.singh.harsukh.redder.R;
+import com.singh.harsukh.redder.SpaceItemDecoration;
+import com.singh.harsukh.redder.adapter.SectionAdapter;
 
 import java.util.ArrayList;
 
@@ -54,6 +58,8 @@ public class SectionsFragment extends android.app.Fragment {
 
         sectionAdapter = new SectionAdapter(getActivity(),section);
         recyclerView = (RecyclerView) v.findViewById(R.id.section_RecyclerView);
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
+        recyclerView.addItemDecoration(new SpaceItemDecoration(spacingInPixels));
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
         recyclerView.setAdapter(sectionAdapter);
         return v;

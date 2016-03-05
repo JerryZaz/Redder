@@ -14,6 +14,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.singh.harsukh.redder.fragment.SectionsFragment;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -43,7 +45,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.main_navigation_container,SectionsFragment.newInstance()).commit();
+        fragmentManager.beginTransaction().replace(R.id.main_navigation_container, SectionsFragment.newInstance()).commit();
 
     }
 
