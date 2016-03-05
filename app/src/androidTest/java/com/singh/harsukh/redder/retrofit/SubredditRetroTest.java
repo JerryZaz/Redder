@@ -3,10 +3,12 @@ package com.singh.harsukh.redder.retrofit;
 import com.singh.harsukh.redder.BuildConfig;
 import com.singh.harsukh.redder.data.RedditAPI;
 import com.singh.harsukh.redder.model.Listing;
+import com.singh.harsukh.redder.model.Listing.DataEntity.ChildrenEntity;
 
 import junit.framework.TestCase;
 
 import java.io.IOException;
+import java.util.List;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -55,38 +57,16 @@ public class SubredditRetroTest extends TestCase {
             if(decodedResponse != null){
                 System.out.println("Response (contains request infos):");
                 System.out.println("Response kind: " + decodedResponse.getKind());
-                System.out.println("");
+
+                List<ChildrenEntity> posts = decodedResponse.getData().getChildren();
+                for(ChildrenEntity post : posts){
+                    System.out.println("Fetched post title: " + post.getData().getTitle());
+                }
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        /*call.enqueue(new Callback<Listing>() {
-            @Override
-            public void onResponse(Response<Listing> response) {
-                System.out.println("Response status code: " + response.code());
-
-                if (!response.isSuccess()) {
-                    try {
-                        System.out.println(response.errorBody().string());
-                    } catch (IOException e) {
-                    }
-                    return;
-                }
-
-                Listing decodedResponse = response.body();
-                if(decodedResponse != null){
-                    System.out.println("Response (contains request infos):");
-                    System.out.println("Response kind: " + decodedResponse.getKind());
-                    System.out.println("");
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-
-            }
-        });*/
     }
 
 }
