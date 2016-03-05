@@ -18,6 +18,7 @@
         android:layout_weight="1"
         android:text="Section"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#FFFFFF"
         android:textStyle="bold" />
 
 </LinearLayout>
