@@ -12,18 +12,18 @@ import com.singh.harsukh.redder.R;
 import com.singh.harsukh.redder.model.Listing;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by nano1 on 3/5/2016.
  */
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
-    private ArrayList<Listing.DataEntity.ChildrenEntity> childrenEntities;
+    private List<Listing.DataEntity.ChildrenEntity> childrenEntities;
     private Context context;
     private LayoutInflater inflater;
 
-    public MainAdapter(Context context, ArrayList<Listing.DataEntity.ChildrenEntity> childrenEntities) {
+    public MainAdapter(Context context, List<Listing.DataEntity.ChildrenEntity> childrenEntities) {
         this.childrenEntities = childrenEntities;
         this.context = context;
         inflater = LayoutInflater.from(context);
@@ -60,6 +60,16 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
        return (null != childrenEntities ? childrenEntities.size() : 0);
+    }
+
+    public void swapList(List<Listing.DataEntity.ChildrenEntity> childrenEntities){
+        if (this.childrenEntities != null) {
+            this.childrenEntities.clear();
+            this.childrenEntities.addAll(childrenEntities);
+        }else{
+            this.childrenEntities = childrenEntities;
+        }
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

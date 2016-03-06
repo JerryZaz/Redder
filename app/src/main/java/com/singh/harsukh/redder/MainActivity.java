@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.singh.harsukh.redder.fragment.MainFragment;
 import com.singh.harsukh.redder.fragment.SectionsFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity
 
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.main_navigation_container, SectionsFragment.newInstance()).commit();
-
+        fragmentManager.beginTransaction().replace(R.id.main_container, MainFragment.newInstance()).commit();
     }
 
     @Override
