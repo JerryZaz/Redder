@@ -1,6 +1,7 @@
 package com.singh.harsukh.redder.fragment;
 
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.singh.harsukh.redder.R;
 import com.singh.harsukh.redder.SpaceItemDecoration;
@@ -58,7 +60,7 @@ public class SectionsFragment extends android.app.Fragment implements SectionAda
         recyclerView = (RecyclerView) v.findViewById(R.id.section_RecyclerView);
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
         recyclerView.addItemDecoration(new SpaceItemDecoration(spacingInPixels));
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setAdapter(sectionAdapter);
         return v;
     }
@@ -82,9 +84,20 @@ public class SectionsFragment extends android.app.Fragment implements SectionAda
 
     @Override
     public void itemClicked(View view, int position) {
-
+        openFragment(section.get(position));
+        Toast.makeText(getActivity(),section.get(position),Toast.LENGTH_SHORT).show();
     }
 
+    public void openFragment(String title){
+        Bundle bundle = new Bundle();
+        bundle.putString("title", title);
+        FragmentTransaction t = getFragmentManager()
+                .beginTransaction();
+        MainFragment mFrag = new MainFragment();
+        mFrag.setArguments(bundle);
+        t.replace(R.id.main_container, mFrag, "section")
+                .commit();
+    }
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated

@@ -33,6 +33,7 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener{
     private Listing listing;
     private MainAdapter mainAdapter;
     private RecyclerView recyclerView;
+    private String section;
 
     public MainFragment() {
         // Required empty public constructor
@@ -48,6 +49,13 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_main, container, false);
+
+        Bundle bundle = getArguments();
+        section = bundle.getString("title");
+        if (section == null){
+            section = "askreddit";
+        }
+
         recyclerView = (RecyclerView) layout.findViewById(R.id.main_recycleView);
         mainAdapter = new MainAdapter(getActivity(),childrenEntities);
         mainAdapter.setClickListener(this);
@@ -69,7 +77,6 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener{
 
     public void fetchData(){
         final String BASE_URL = BuildConfig.BASE_REDDIT_URL;
-        String section = "all";
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
@@ -104,6 +111,6 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener{
 
     @Override
     public void itemClicked(View view, int position) {
-        
+
     }
 }
