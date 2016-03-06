@@ -8,8 +8,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.singh.harsukh.redder.BuildConfig;
+import com.singh.harsukh.redder.MainActivity;
 import com.singh.harsukh.redder.R;
 import com.singh.harsukh.redder.adapter.MainAdapter;
 import com.singh.harsukh.redder.data.RedditAPI;
@@ -82,6 +84,7 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener{
     @Override
     public void onResume() {
         super.onResume();
+        ((MainActivity) getActivity()).setActionBarTitle(section);
         fetchData();
     }
 
@@ -121,7 +124,7 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener{
 
     @Override
     public void itemClicked(View view, int position) {
-
+        Toast.makeText(getActivity(),"Intent to Open Google Custom Tabs " + childrenEntities.get(position).getData().getAuthor(),Toast.LENGTH_SHORT).show();
     }
 
     @Override

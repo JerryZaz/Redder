@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.singh.harsukh.redder.R;
 import com.singh.harsukh.redder.model.Listing;
@@ -57,6 +58,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
                     .centerCrop()
                     .into(holder.mImageViewItem);
         }
+
     }
 
     public void setClickListener(ClickListener clickListener){
@@ -112,13 +114,41 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             mImageViewVoteUp = (ImageView) itemView.findViewById(R.id.image_vote_up);
             mImageViewVoteDown = (ImageView) itemView.findViewById(R.id.image_vote_down);
             mImageViewSave = (ImageView) itemView.findViewById(R.id.image_save);
-            mImageViewItem.setOnClickListener(this);
+            mImageViewItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context,"Open Image",Toast.LENGTH_SHORT).show();
+//                    Intent intent = new Intent(context, class);
+//                    intent.putExtra("image", childrenEntities.get(getPosition()));
+//                    context.startActivity(intent);
+                }
+            });
+            mImageViewVoteUp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context,"Login to Vote",Toast.LENGTH_SHORT).show();
+                }
+            });
+            mImageViewVoteDown.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context,"Login to Vote",Toast.LENGTH_SHORT).show();
+                }
+            });
+            mImageViewSave.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context, "Login to Save", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             if (clickListener!= null){
-                clickListener.itemClicked(v, getPosition());
+                clickListener.itemClicked(v,getPosition());
             }
         }
     }
