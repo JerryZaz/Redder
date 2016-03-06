@@ -70,6 +70,7 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener{
         mainAdapter.setClickListener(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(mainAdapter);
+        recyclerView.refreshDrawableState();
         return layout;
     }
 
@@ -120,6 +121,7 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener{
 
     @Override
     public void itemClicked(View view, int position) {
+
     }
 
     @Override
@@ -158,4 +160,5 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener{
         recyclerView.refreshDrawableState();
         return false;
     }
+
 }

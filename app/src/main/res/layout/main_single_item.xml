@@ -35,8 +35,7 @@
             <ImageView
                 android:id="@+id/image_item"
                 android:layout_width="fill_parent"
-                android:layout_height="100dp"
-                android:visibility="invisible"/>
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <LinearLayout

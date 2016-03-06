@@ -50,11 +50,11 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         holder.mTextViewNumComments.setText(String.valueOf(childrenEntity.getData().getNum_comments()));
         //holder.mTextViewTime.setText(String.valueOf(childrenEntity.getData().getCreated_utc()));
 
-        if (!childrenEntity.getData().getThumbnail().equals(null)) {
-            holder.mImageViewItem.setVisibility(View.VISIBLE);
-
+        if (!childrenEntity.getData().getThumbnail().equals("")) {
             Picasso.with(context)
                     .load(childrenEntity.getData().getUrl())
+                    .resize(holder.mImageViewItem.getMeasuredWidth(), 500)
+                    .centerCrop()
                     .into(holder.mImageViewItem);
         }
     }

@@ -1,8 +1,7 @@
 package com.singh.harsukh.redder.fragment;
 
-
-import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,20 +9,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.singh.harsukh.redder.R;
 import com.singh.harsukh.redder.SpaceItemDecoration;
 import com.singh.harsukh.redder.adapter.SectionAdapter;
+import com.singh.harsukh.redder.utils.Utilities;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
-
-
-public class SectionsFragment extends android.app.Fragment implements SectionAdapter.ClickListener {
+public class SectionsFragment extends android.app.Fragment {
 
     public RecyclerView recyclerView;
-    public ArrayList<String> section;
+    public Set<String> section;
     private OnFragmentInteractionListener mListener;
     private SectionAdapter sectionAdapter;
 
@@ -41,13 +41,6 @@ public class SectionsFragment extends android.app.Fragment implements SectionAda
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        section = new ArrayList<>();
-        section.add(getString(R.string.title_section1));
-        section.add(getString(R.string.title_section2));
-        section.add(getString(R.string.title_section3));
-        section.add("etc");
-        section.add("more");
-        section.add("It Works");
     }
 
     @Override
@@ -55,14 +48,20 @@ public class SectionsFragment extends android.app.Fragment implements SectionAda
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_sections, container, false);
 
-        sectionAdapter = new SectionAdapter(getActivity(),section);
-        sectionAdapter.setClickListener(this);
+        section = new HashSet<>();
+        getSections();
+        sectionAdapter = new SectionAdapter(getActivity(), new ArrayList<>(section));
         recyclerView = (RecyclerView) v.findViewById(R.id.section_RecyclerView);
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
         recyclerView.addItemDecoration(new SpaceItemDecoration(spacingInPixels));
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setAdapter(sectionAdapter);
         return v;
+    }
+
+    public void getSections(){
+        SharedPreferences preferences = getActivity().getSharedPreferences(Utilities.PERSISTENT, Context.MODE_PRIVATE);
+        section = preferences.getStringSet(Utilities.SECTIONS, new HashSet<>(Arrays.asList(Utilities.SECTIONS_DEFAULT)));
     }
 
     @Override
@@ -82,22 +81,6 @@ public class SectionsFragment extends android.app.Fragment implements SectionAda
         mListener = null;
     }
 
-    @Override
-    public void itemClicked(View view, int position) {
-        openFragment(section.get(position));
-        Toast.makeText(getActivity(), section.get(position), Toast.LENGTH_SHORT).show();
-    }
-
-    public void openFragment(String title){
-        Bundle bundle = new Bundle();
-        bundle.putString("title", title);
-        FragmentTransaction t = getFragmentManager()
-                .beginTransaction();
-        MainFragment mFrag = new MainFragment();
-        mFrag.setArguments(bundle);
-        t.replace(R.id.main_container, mFrag, "section")
-                .commit();
-    }
 
     /**
      * This interface must be implemented by activities that contain this
