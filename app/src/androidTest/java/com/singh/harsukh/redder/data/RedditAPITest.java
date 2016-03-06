@@ -24,7 +24,7 @@ import retrofit2.Retrofit;
 public class RedditAPITest extends TestCase {
 
     public void testMultipleSubreddits() {
-        //testGetPostsFromSubreddit("android");
+        //testGetPostsFromSubreddit("askreddit");
         try {
             testSearchListingsWithQueryParam("cat");
         } catch (Exception e) {
