@@ -35,10 +35,11 @@ import retrofit2.Retrofit;
 public class MainFragment extends Fragment implements MainAdapter.ClickListener{
 
     private List<Listing.DataEntity.ChildrenEntity> childrenEntities;
-    private Listing listing;
+
+    private Listing mListing;
     private MainAdapter mainAdapter;
     private RecyclerView recyclerView;
-    private String section;
+    private String mSection;
 
     public MainFragment() {
         // Required empty public constructor
@@ -62,9 +63,9 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener{
         View layout = inflater.inflate(R.layout.fragment_main, container, false);
 
         Bundle bundle = getArguments();
-        section = bundle.getString("title");
-        if (section == null){
-            section = "all";
+        mSection = bundle.getString("title");
+        if (mSection == null){
+            mSection = "all";
         }
 
         recyclerView = (RecyclerView) layout.findViewById(R.id.main_recycleView);
@@ -82,10 +83,20 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener{
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        ((MainActivity) getActivity()).setActionBarTitle(section);
+        ((MainActivity) getActivity()).setActionBarTitle(mSection);
         fetchData();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
     }
 
     public void fetchData(){
@@ -106,12 +117,12 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener{
 
         RedditAPI redditAPI = retrofit.create(RedditAPI.class);
 
-        Call<Listing> call  = redditAPI.getPostsFromSubreddit(section);
+        Call<Listing> call  = redditAPI.getPostsFromSubreddit(mSection);
         call.enqueue(new Callback<Listing>() {
             @Override
             public void onResponse(Response<Listing> response) {
-                listing = response.body();
-                childrenEntities = listing.getData().getChildren();
+                mListing = response.body();
+                childrenEntities = mListing.getData().getChildren();
                 mainAdapter.swapList(childrenEntities);
             }
 
@@ -125,6 +136,7 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener{
     @Override
     public void itemClicked(View view, int position) {
         Toast.makeText(getActivity(),"Intent to Open Google Custom Tabs " + childrenEntities.get(position).getData().getAuthor(),Toast.LENGTH_SHORT).show();
+        ((MainActivity) getActivity()).customTab(childrenEntities.get(position).getData().getUrl(), getActivity());
     }
 
     @Override
