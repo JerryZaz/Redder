@@ -70,8 +70,7 @@ public class MainFragment extends Fragment {
 
     public void fetchData(){
         final String BASE_URL = BuildConfig.BASE_REDDIT_URL;
-        String section = "android";
-
+        String section = "all";
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);

@@ -39,27 +39,36 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Listing.DataEntity.ChildrenEntity  childrenEntity = childrenEntities.get(position);
+        String mUserName = trimUsername(childrenEntity.getData().getAuthor());
 
         holder.mTextViewTitle.setText(childrenEntity.getData().getTitle());
-        holder.mTextViewUserName.setText(childrenEntity.getData().getAuthor());
+        holder.mTextViewUserName.setText(mUserName);
 
         //int
         holder.mTextViewScore.setText(String.valueOf(childrenEntity.getData().getScore()));
         holder.mTextViewNumComments.setText(String.valueOf(childrenEntity.getData().getNum_comments()));
-        holder.mTextViewTime.setText(String.valueOf(childrenEntity.getData().getCreated_utc()));
+        //holder.mTextViewTime.setText(String.valueOf(childrenEntity.getData().getCreated_utc()));
 
-        if (!childrenEntity.getData().getThumbnail().equals("")) {
+        if (!childrenEntity.getData().getThumbnail().equals(null)) {
+            holder.mImageViewItem.setVisibility(View.VISIBLE);
+
             Picasso.with(context)
-                    .load(childrenEntity.getData().getThumbnail())
+                    .load(childrenEntity.getData().getUrl())
                     .into(holder.mImageViewItem);
-        }else {
-            //holder.mImageViewItem.setVisibility(View.INVISIBLE);
         }
     }
 
     @Override
     public int getItemCount() {
        return (null != childrenEntities ? childrenEntities.size() : 0);
+    }
+
+    public String trimUsername(String name){
+
+        if (name.length() > 10){
+            name = name.substring(0,7) + "...";
+        }
+        return name;
     }
 
     public void swapList(List<Listing.DataEntity.ChildrenEntity> childrenEntities){
