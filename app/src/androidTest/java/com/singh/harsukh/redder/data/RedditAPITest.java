@@ -3,6 +3,8 @@ package com.singh.harsukh.redder.data;
 import com.singh.harsukh.redder.BuildConfig;
 import com.singh.harsukh.redder.model.Listing;
 import com.singh.harsukh.redder.model.Listing.DataEntity.ChildrenEntity;
+import com.singh.harsukh.redder.model.ThingWithMedia;
+import com.singh.harsukh.redder.model.ThingWithMedia.DataEntity.ChildrenEntity.ChildrenDataEntity.PreviewEntity.ImagesEntity;
 
 import junit.framework.TestCase;
 
@@ -22,7 +24,12 @@ import retrofit2.Retrofit;
 public class RedditAPITest extends TestCase {
 
     public void testMultipleSubreddits() {
-        testGetPostsFromSubreddit("android");
+        //testGetPostsFromSubreddit("android");
+        try {
+            testSearchListingsWithQueryParam("cat");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void testGetPostsFromSubreddit(String subreddit) {
@@ -85,8 +92,52 @@ public class RedditAPITest extends TestCase {
         try {
             Response<List<Listing>> response = call.execute();
             assertTrue(response.isSuccess());
-        } catch (IOException e){
+
+            List<Listing> decodedResponse = response.body();
+
+            List<ChildrenEntity> children = decodedResponse.get(1).getData().getChildren();
+            for (ChildrenEntity child : children) {
+                try {
+                    // t1 is a comment Thing so, testing if the result is a comment
+                    assertEquals("t1", child.getKind());
+                    assertFalse("Child's body was empty", child.getData().getSelftext() == null);
+
+                } catch (AssertionError e) {
+                    System.err.println("Child kind was: " + child.getKind());
+                    System.err.println("Child's content was : " + child.getData().getSelftext());
+                    System.err.println(buildCommentUrl(child.getData().getName()));
+
+                }
+            }
+            System.out.println("Number of comments: " + children.size());
+        } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public String buildCommentUrl(String name) {
+        return BuildConfig.BASE_REDDIT_URL + "/api/info.json?id=" + name;
+    }
+
+    public void testSearchListingsWithQueryParam(String searchQuery) throws Exception {
+
+        String subreddit = "pics";
+
+        Retrofit retrofit = BaseRetrofitImplementation.initRetrofit();
+        RedditAPI redditAPI = retrofit.create(RedditAPI.class);
+        Call<ThingWithMedia> call = redditAPI.searchListingsWithQueryParam(subreddit, searchQuery);
+        Response<ThingWithMedia> response = call.execute();
+
+        assertTrue(response.isSuccess());
+        ThingWithMedia thing = response.body();
+        for (ThingWithMedia.DataEntity.ChildrenEntity child : thing.getData().getChildren()) {
+            //System.out.println(child.getData().getSelftext());
+
+            if(child.getData().getPreview() != null) {
+                for (ImagesEntity images : child.getData().getPreview().getImages()) {
+                    System.out.println(images.getSource().getUrl());
+                }
+            }
         }
     }
 

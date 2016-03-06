@@ -1,5 +1,7 @@
 package com.singh.harsukh.redder.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -92,7 +94,10 @@ public class Listing {
                 private String domain;
                 private Object banned_by;
                 private String subreddit;
+
+                @SerializedName("body_html")
                 private String selftext_html;
+                @SerializedName("body")
                 private String selftext;
                 private Object likes;
                 private Object suggested_sort;

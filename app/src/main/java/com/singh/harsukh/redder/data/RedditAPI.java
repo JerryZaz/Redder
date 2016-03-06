@@ -1,6 +1,7 @@
 package com.singh.harsukh.redder.data;
 
 import com.singh.harsukh.redder.model.Listing;
+import com.singh.harsukh.redder.model.ThingWithMedia;
 
 import java.util.List;
 
@@ -19,6 +20,11 @@ public interface RedditAPI {
             @Path("subreddit") String subreddit
     );
 
+    @GET("r/{subreddit}/.json")
+    Call<ThingWithMedia> getPostsFromSubredditWithMedia(
+            @Path("subreddit") String subreddit
+    );
+
     /**
      * Retrieves the comments tree for the passed article
      * @param nameOfSubreddit must be the full name prefix_id (i.e. t5_2cneq)
@@ -31,8 +37,19 @@ public interface RedditAPI {
             @Path("articleID") String articleID
     );
 
+    @GET("api/info.json")
+    Call<Listing> fetchComment(
+            @Query("id") String name
+    );
+
     @GET("r/{subreddit}/search.json")
-    Call<String> searchListingsWithQueryParamAndSort(
+    Call<ThingWithMedia> searchListingsWithQueryParam(
+            @Path("subreddit") String subreddit,
+            @Query("q") String queryParam
+    );
+
+    @GET("r/{subreddit}/search.json")
+    Call<Listing> searchListingsWithQueryParamAndSort(
             @Query("q") String queryParam,
             @Query("sort") String sortOrder
     );
