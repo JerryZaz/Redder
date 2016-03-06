@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -14,6 +15,8 @@ import com.singh.harsukh.redder.adapter.MainAdapter;
 import com.singh.harsukh.redder.data.RedditAPI;
 import com.singh.harsukh.redder.model.Listing;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
@@ -47,13 +50,19 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener{
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_main, container, false);
 
         Bundle bundle = getArguments();
         section = bundle.getString("title");
         if (section == null){
-            section = "askreddit";
+            section = "all";
         }
 
         recyclerView = (RecyclerView) layout.findViewById(R.id.main_recycleView);
@@ -111,6 +120,42 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener{
 
     @Override
     public void itemClicked(View view, int position) {
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        //noinspection SimplifiableIfStatement
+        switch (id) {
+            case R.id.action_sort_title:
+                Collections.sort(childrenEntities, new Comparator<Listing.DataEntity.ChildrenEntity>() {
+                    @Override
+                    public int compare(Listing.DataEntity.ChildrenEntity lhs, Listing.DataEntity.ChildrenEntity rhs) {
+                        return lhs.getData().getTitle().compareTo(rhs.getData().getTitle());
+                    }
+                });
+                break;
+            case R.id.action_sort_score:
+                Collections.sort(childrenEntities, Collections.reverseOrder(new Comparator<Listing.DataEntity.ChildrenEntity>() {
+                    @Override
+                    public int compare(Listing.DataEntity.ChildrenEntity lhs, Listing.DataEntity.ChildrenEntity rhs) {
+                        return lhs.getData().getScore() - rhs.getData().getScore();
+                    }
+                }));
+                break;
+            case R.id.action_sort_created:
+                Collections.sort(childrenEntities, Collections.reverseOrder(new Comparator<Listing.DataEntity.ChildrenEntity>() {
+                    @Override
+                    public int compare(Listing.DataEntity.ChildrenEntity lhs, Listing.DataEntity.ChildrenEntity rhs) {
+                        return lhs.getData().getCreated()-rhs.getData().getCreated();
+                    }
+                }));
+                break;
+        }
+
+        mainAdapter.notifyDataSetChanged();
+        //recyclerView.invalidateViews();
+        recyclerView.refreshDrawableState();
+        return false;
     }
 }

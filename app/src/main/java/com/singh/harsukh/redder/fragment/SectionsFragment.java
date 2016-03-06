@@ -85,7 +85,7 @@ public class SectionsFragment extends android.app.Fragment implements SectionAda
     @Override
     public void itemClicked(View view, int position) {
         openFragment(section.get(position));
-        Toast.makeText(getActivity(),section.get(position),Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), section.get(position), Toast.LENGTH_SHORT).show();
     }
 
     public void openFragment(String title){
@@ -98,6 +98,7 @@ public class SectionsFragment extends android.app.Fragment implements SectionAda
         t.replace(R.id.main_container, mFrag, "section")
                 .commit();
     }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated

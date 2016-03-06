@@ -18,7 +18,7 @@ import com.singh.harsukh.redder.fragment.MainFragment;
 import com.singh.harsukh.redder.fragment.SectionsFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,11 +75,15 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_sort_title:
+                break;
+            case R.id.action_sort_score:
+                break;
+            case R.id.action_sort_created:
+                break;
         }
-
-        return super.onOptionsItemSelected(item);
+        return false;
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

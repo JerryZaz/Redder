@@ -5,6 +5,9 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="action_sort_title">Sort by Title</string>
+    <string name="action_sort_score">Sort by Score</string>
+    <string name="action_sort_created">Sort by Time Created</string>
 
     <!-- Section Titles -->
     <string name="title_section1">All</string>
