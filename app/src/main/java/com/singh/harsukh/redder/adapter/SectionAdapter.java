@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.singh.harsukh.redder.R;
 
@@ -21,6 +20,7 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
     private ArrayList section;
     private LayoutInflater inflater;
     private Context context;
+    private ClickListener clickListener;
 
     public SectionAdapter(Context context, ArrayList section){
         this.section = section;
@@ -36,14 +36,11 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-
         holder.sectionTextView.setText(section.get(position).toString());
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, section.get(position).toString(),Toast.LENGTH_SHORT).show();
-            }
-        });
+    }
+
+    public void setClickListener(ClickListener clickListener){
+        this.clickListener = clickListener;
     }
 
     @Override
@@ -51,13 +48,25 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
         return (null != section ? section.size() : 0);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public interface ClickListener{
+        void itemClicked(View view, int position);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         public TextView sectionTextView;
 
         public ViewHolder(final View itemView) {
             super(itemView);
             sectionTextView = (TextView) itemView.findViewById(R.id.section_textView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (clickListener!= null){
+                clickListener.itemClicked(v, getPosition());
+            }
         }
     }
 }

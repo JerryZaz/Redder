@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 
 
-public class SectionsFragment extends android.app.Fragment {
+public class SectionsFragment extends android.app.Fragment implements SectionAdapter.ClickListener {
 
     public RecyclerView recyclerView;
     public ArrayList<String> section;
@@ -54,6 +54,7 @@ public class SectionsFragment extends android.app.Fragment {
         View v = inflater.inflate(R.layout.fragment_sections, container, false);
 
         sectionAdapter = new SectionAdapter(getActivity(),section);
+        sectionAdapter.setClickListener(this);
         recyclerView = (RecyclerView) v.findViewById(R.id.section_RecyclerView);
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
         recyclerView.addItemDecoration(new SpaceItemDecoration(spacingInPixels));
@@ -77,6 +78,11 @@ public class SectionsFragment extends android.app.Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void itemClicked(View view, int position) {
+
     }
 
     /**

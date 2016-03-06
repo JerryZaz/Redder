@@ -22,6 +22,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     private List<Listing.DataEntity.ChildrenEntity> childrenEntities;
     private Context context;
     private LayoutInflater inflater;
+    private ClickListener clickListener;
 
     public MainAdapter(Context context, List<Listing.DataEntity.ChildrenEntity> childrenEntities) {
         this.childrenEntities = childrenEntities;
@@ -58,6 +59,10 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         }
     }
 
+    public void setClickListener(ClickListener clickListener){
+        this.clickListener = clickListener;
+    }
+
     @Override
     public int getItemCount() {
        return (null != childrenEntities ? childrenEntities.size() : 0);
@@ -81,7 +86,11 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public interface ClickListener{
+        void itemClicked(View view, int position);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView mTextViewTitle;
         TextView mTextViewUserName;
         TextView mTextViewScore;
@@ -103,6 +112,14 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             mImageViewVoteUp = (ImageView) itemView.findViewById(R.id.image_vote_up);
             mImageViewVoteDown = (ImageView) itemView.findViewById(R.id.image_vote_down);
             mImageViewSave = (ImageView) itemView.findViewById(R.id.image_save);
+            mImageViewItem.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (clickListener!= null){
+                clickListener.itemClicked(v, getPosition());
+            }
         }
     }
 }

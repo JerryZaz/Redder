@@ -27,13 +27,12 @@ import retrofit2.Retrofit;
 /**
  * Created by nano1 on 3/5/2016.
  */
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment implements MainAdapter.ClickListener{
 
     private List<Listing.DataEntity.ChildrenEntity> childrenEntities;
     private Listing listing;
     private MainAdapter mainAdapter;
     private RecyclerView recyclerView;
-
 
     public MainFragment() {
         // Required empty public constructor
@@ -48,24 +47,24 @@ public class MainFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.main_recycleView);
-        return view;
+        View layout = inflater.inflate(R.layout.fragment_main, container, false);
+        recyclerView = (RecyclerView) layout.findViewById(R.id.main_recycleView);
+        mainAdapter = new MainAdapter(getActivity(),childrenEntities);
+        mainAdapter.setClickListener(this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(mainAdapter);
+        return layout;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mainAdapter = new MainAdapter(getActivity(),childrenEntities);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(mainAdapter);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         fetchData();
-
     }
 
     public void fetchData(){
@@ -101,5 +100,10 @@ public class MainFragment extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void itemClicked(View view, int position) {
+        
     }
 }
