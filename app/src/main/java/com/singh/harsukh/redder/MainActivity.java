@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity
         actionIntent.putExtra(Intent.EXTRA_EMAIL, "example@example.com");
         actionIntent.putExtra(Intent.EXTRA_SUBJECT, "example");
         PendingIntent pi = PendingIntent.getActivity(context, 0, actionIntent, 0);
-        Bitmap icon = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_menu_share);
+        Bitmap icon = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
         builder.setActionButton(icon, "send email", pi);
     }
 
