@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.singh.harsukh.redder.BuildConfig;
 import com.singh.harsukh.redder.model.Listing;
+import com.singh.harsukh.redder.model.Reddit.RedditListing;
 import com.singh.harsukh.redder.model.Reddit.RedditObject;
+import com.singh.harsukh.redder.model.Reddit.RedditResponse;
 import com.singh.harsukh.redder.model.Thing;
 
 import org.joda.time.DateTime;
@@ -42,6 +44,11 @@ public interface RedditService {
      */
     @GET("r/{subreddit}.json")
     Call<Thing> getPostsFromSubredditWithMedia(
+            @Path("subreddit") String subreddit
+    );
+
+    @GET("r/{subreddit}.json")
+    Call<RedditResponse<RedditListing>> getSubreddit(
             @Path("subreddit") String subreddit
     );
 
