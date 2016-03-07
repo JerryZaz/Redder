@@ -46,8 +46,30 @@ public class RedditServiceTest extends TestCase {
             if(child instanceof RedditComment) {
                 RedditComment comment = (RedditComment) child;
                 System.out.println(comment.getBody());
+                testGetReplies(comment);
             }
         }
         System.out.println("----- END -----");
+    }
+
+    public void testGetReplies(RedditComment comment){
+        if(comment.getReplies() != null){
+            RedditListing repliesListing = (RedditListing) comment.getReplies();
+            for(RedditObject object : repliesListing.getChildren()){
+                if(object instanceof RedditComment){
+                    RedditComment childComment = (RedditComment) object;
+                    childComment.setDepth(comment.getDepth() + 1);
+
+                    StringBuilder builder = new StringBuilder();
+                    for(int i = 0; i < childComment.getDepth(); i++){
+                        builder.append("-");
+                    }
+                    builder.append(childComment.getBody());
+                    System.out.println(builder.toString());
+
+                    testGetReplies(childComment);
+                }
+            }
+        }
     }
 }
