@@ -1,5 +1,6 @@
 package com.singh.harsukh.redder.data;
 
+import com.singh.harsukh.redder.model.Reddit.RedditComment;
 import com.singh.harsukh.redder.model.Reddit.RedditLink;
 import com.singh.harsukh.redder.model.Reddit.RedditListing;
 import com.singh.harsukh.redder.model.Reddit.RedditObject;
@@ -28,6 +29,25 @@ public class RedditServiceTest extends TestCase {
         for(RedditObject child : children){
             RedditLink link = (RedditLink) child;
             System.out.println(link.getTitle());
+            testGetComments(link.getSubreddit(), link.getId());
         }
+    }
+
+    public void testGetComments(String subreddit, String id) throws Exception {
+        Call<List<RedditResponse<RedditListing>>> call = RedditService.Implementation.get()
+                .getComments(subreddit, id);
+        Response<List<RedditResponse<RedditListing>>> response = call.execute();
+        assertTrue(response.isSuccess());
+        List<RedditResponse<RedditListing>> decodedResponse = response.body();
+        List<RedditObject> children = decodedResponse.get(1).getData().getChildren();
+
+        System.out.println("----- COMMENTS -----");
+        for(RedditObject child : children){
+            if(child instanceof RedditComment) {
+                RedditComment comment = (RedditComment) child;
+                System.out.println(comment.getBody());
+            }
+        }
+        System.out.println("----- END -----");
     }
 }

@@ -1,14 +1,9 @@
 package com.singh.harsukh.redder.data;
 
 import com.singh.harsukh.redder.BuildConfig;
-import com.singh.harsukh.redder.model.Listing;
-import com.singh.harsukh.redder.model.Listing.DataEntity.ChildrenEntity;
 import com.singh.harsukh.redder.model.Thing;
 
 import junit.framework.TestCase;
-
-import java.io.IOException;
-import java.util.List;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -23,7 +18,7 @@ import retrofit2.Retrofit;
 public class RedditAPITest extends TestCase {
 
     public void testMultipleSubreddits() {
-        testGetPostsFromSubreddit("askreddit");
+        //testGetPostsFromSubreddit("askreddit");
         /*try {
             testSearchListingsWithQueryParam("cat");
         } catch (Exception e) {
@@ -31,7 +26,7 @@ public class RedditAPITest extends TestCase {
         }*/
     }
 
-    public void testGetPostsFromSubreddit(String subreddit) {
+    /*public void testGetPostsFromSubreddit(String subreddit) {
 
         RedditService redditAPI = BaseRetrofitImplementation.initRetrofit().create(RedditService.class);
 
@@ -81,7 +76,7 @@ public class RedditAPITest extends TestCase {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     /*public void testGetCommentsFromPost(String nameOfSubreddit, String articleID)
             throws Exception {
@@ -114,7 +109,7 @@ public class RedditAPITest extends TestCase {
         }
     }*/
 
-    public void testGetCommentsFromPost(String nameOfSubreddit, String articleID)
+    /*public void testGetCommentsFromPost(String nameOfSubreddit, String articleID)
             throws Exception {
         Retrofit retrofit = BaseRetrofitImplementation.initRetrofit();
         RedditService redditAPI = retrofit.create(RedditService.class);
@@ -143,7 +138,7 @@ public class RedditAPITest extends TestCase {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     public String buildCommentUrl(String name) {
         return BuildConfig.BASE_REDDIT_URL + "/api/info.json?id=" + name;

@@ -30,18 +30,10 @@ public interface RedditService {
             @Path("subreddit") String subreddit
     );
 
-    /**
-     * Retrieves the comments tree for the passed article
-     * @param nameOfSubreddit must be the full name prefix_id (i.e. t5_2cneq)
-     * @param articleID field "id" of the ChildrenDataEntity class (i.e. 492viu)
-     * @return List of two Listing objects, first one is a t3 representing the
-     * post's head section. Second element on the list contains t1 elements only,
-     * in other words, the comments attached to the post
-     */
-    @GET("r/{subreddit}/comments/{articleID}.json")
-    Call<List<Listing>> getCommentsFromPost(
-            @Path("subreddit") String nameOfSubreddit,
-            @Path("articleID") String articleID
+    @GET("r/{subreddit}/comments/{link_id}.json")
+    Call<List<RedditResponse<RedditListing>>> getComments(
+            @Path("subreddit") String subreddit,
+            @Path("link_id") String id
     );
 
     /**
