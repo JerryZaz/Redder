@@ -3,8 +3,7 @@ package com.singh.harsukh.redder.data;
 import com.singh.harsukh.redder.BuildConfig;
 import com.singh.harsukh.redder.model.Listing;
 import com.singh.harsukh.redder.model.Listing.DataEntity.ChildrenEntity;
-import com.singh.harsukh.redder.model.ThingWithMedia;
-import com.singh.harsukh.redder.model.ThingWithMedia.DataEntity.ChildrenEntity.ChildrenDataEntity.PreviewEntity.ImagesEntity;
+import com.singh.harsukh.redder.model.Thing;
 
 import junit.framework.TestCase;
 
@@ -24,17 +23,17 @@ import retrofit2.Retrofit;
 public class RedditAPITest extends TestCase {
 
     public void testMultipleSubreddits() {
-        //testGetPostsFromSubreddit("askreddit");
-        try {
+        testGetPostsFromSubreddit("askreddit");
+        /*try {
             testSearchListingsWithQueryParam("cat");
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     public void testGetPostsFromSubreddit(String subreddit) {
 
-        RedditAPI redditAPI = BaseRetrofitImplementation.initRetrofit().create(RedditAPI.class);
+        RedditService redditAPI = BaseRetrofitImplementation.initRetrofit().create(RedditService.class);
 
         Call<Listing> call = redditAPI.getPostsFromSubreddit(subreddit);
 
@@ -84,10 +83,41 @@ public class RedditAPITest extends TestCase {
         }
     }
 
-    public void testGetCommentsFromPost(String nameOfSubreddit, String articleID)
+    /*public void testGetCommentsFromPost(String nameOfSubreddit, String articleID)
             throws Exception {
         Retrofit retrofit = BaseRetrofitImplementation.initRetrofit();
         RedditAPI redditAPI = retrofit.create(RedditAPI.class);
+        Call<List<Thing>> call = redditAPI.getCommentsFromPost(nameOfSubreddit, articleID);
+        try {
+            Response<List<Thing>> response = call.execute();
+            assertTrue(response.isSuccess());
+
+            List<Thing> decodedResponse = response.body();
+
+            List<Thing.DataEntity.ChildrenEntity> children = decodedResponse.get(1).getData().getChildren();
+            for (Thing.DataEntity.ChildrenEntity child : children) {
+                try {
+                    // t1 is a comment Thing so, testing if the result is a comment
+                    assertEquals("t1", child.getKind());
+                    assertFalse("Child's body was empty", child.getData().getBody() == null);
+
+                } catch (AssertionError e) {
+                    System.err.println("Child kind was: " + child.getKind());
+                    System.err.println("Child's content was : " + child.getData().getBody());
+                    System.err.println(buildCommentUrl(child.getData().getName()));
+
+                }
+            }
+            System.out.println("Number of comments: " + children.size());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }*/
+
+    public void testGetCommentsFromPost(String nameOfSubreddit, String articleID)
+            throws Exception {
+        Retrofit retrofit = BaseRetrofitImplementation.initRetrofit();
+        RedditService redditAPI = retrofit.create(RedditService.class);
         Call<List<Listing>> call = redditAPI.getCommentsFromPost(nameOfSubreddit, articleID);
         try {
             Response<List<Listing>> response = call.execute();
@@ -124,17 +154,17 @@ public class RedditAPITest extends TestCase {
         String subreddit = "pics";
 
         Retrofit retrofit = BaseRetrofitImplementation.initRetrofit();
-        RedditAPI redditAPI = retrofit.create(RedditAPI.class);
-        Call<ThingWithMedia> call = redditAPI.searchListingsWithQueryParam(subreddit, searchQuery);
-        Response<ThingWithMedia> response = call.execute();
+        RedditService redditAPI = retrofit.create(RedditService.class);
+        Call<Thing> call = redditAPI.searchListingsWithQueryParam(subreddit, searchQuery);
+        Response<Thing> response = call.execute();
 
         assertTrue(response.isSuccess());
-        ThingWithMedia thing = response.body();
-        for (ThingWithMedia.DataEntity.ChildrenEntity child : thing.getData().getChildren()) {
+        Thing thing = response.body();
+        for (Thing.DataEntity.ChildrenEntity child : thing.getData().getChildren()) {
             //System.out.println(child.getData().getSelftext());
 
             if(child.getData().getPreview() != null) {
-                for (ImagesEntity images : child.getData().getPreview().getImages()) {
+                for (Thing.DataEntity.ChildrenEntity.ChildrenDataEntity.PreviewEntity.ImagesEntity images : child.getData().getPreview().getImages()) {
                     System.out.println(images.getSource().getUrl());
                 }
             }

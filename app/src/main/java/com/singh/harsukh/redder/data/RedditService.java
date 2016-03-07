@@ -1,11 +1,19 @@
 package com.singh.harsukh.redder.data;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.singh.harsukh.redder.BuildConfig;
 import com.singh.harsukh.redder.model.Listing;
-import com.singh.harsukh.redder.model.ThingWithMedia;
+import com.singh.harsukh.redder.model.Reddit.RedditObject;
+import com.singh.harsukh.redder.model.Thing;
+
+import org.joda.time.DateTime;
 
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.GsonConverterFactory;
+import retrofit2.Retrofit;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -13,7 +21,7 @@ import retrofit2.http.Query;
 /**
  * Created by Henry on 3/4/2016.
  */
-public interface RedditAPI {
+public interface RedditService {
 
     /**
      * Retrieves a Listing object containing a List of Children that represent
@@ -32,8 +40,8 @@ public interface RedditAPI {
      * @param subreddit the t5 to be queried
      * @return top rated t3 things tied to the t5 param
      */
-    @GET("r/{subreddit}/.json")
-    Call<ThingWithMedia> getPostsFromSubredditWithMedia(
+    @GET("r/{subreddit}.json")
+    Call<Thing> getPostsFromSubredditWithMedia(
             @Path("subreddit") String subreddit
     );
 
@@ -68,7 +76,7 @@ public interface RedditAPI {
      * @return t3 things
      */
     @GET("r/{subreddit}/search.json")
-    Call<ThingWithMedia> searchListingsWithQueryParam(
+    Call<Thing> searchListingsWithQueryParam(
             @Path("subreddit") String subreddit,
             @Query("q") String queryParam
     );
@@ -84,4 +92,27 @@ public interface RedditAPI {
             @Query("q") String queryParam,
             @Query("sort") String sortOrder
     );
+
+    class Implementation{
+
+        public static RedditService get(){
+            return getBuilder()
+                    .build()
+                    .create(RedditService.class);
+        }
+
+        static Retrofit.Builder getBuilder(){
+            return new Retrofit.Builder()
+                    .baseUrl(BuildConfig.BASE_REDDIT_URL)
+                    .addConverterFactory(GsonConverterFactory.create(getGson()));
+        }
+
+        private static Gson getGson() {
+            return new GsonBuilder()
+                    .registerTypeAdapter(RedditObject.class, new RedditObjectDeserializer())
+                    .registerTypeAdapter(DateTime.class, new DateTimeDeserializer())
+                    .create();
+        }
+    }
+
 }
