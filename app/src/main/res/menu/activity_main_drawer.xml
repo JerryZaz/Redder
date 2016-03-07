@@ -18,6 +18,10 @@
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
             android:title="Tools"/>
+        <item
+            android:id="@+id/nav_get_subreddits"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Get Subreddits"/>
     </group>
 
     <item android:title="Communicate">

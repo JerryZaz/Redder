@@ -1,6 +1,8 @@
 package com.singh.harsukh.redder;
 
 import android.app.FragmentManager;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -10,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +21,8 @@ import com.singh.harsukh.redder.fragment.SectionsFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private SharedPreferences mPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +52,8 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.main_navigation_container, SectionsFragment.newInstance()).commit();
 
+        mPreferences = getSharedPreferences("preferences", MODE_PRIVATE);
+        mPreferences.getString("access_token", "");
     }
 
     @Override
@@ -100,9 +107,27 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         }
-
+        else if(id == R.id.nav_get_subreddits)
+        {
+            Intent intent = AccessActivity.getIntent(this);
+            startActivityForResult(intent, 123);
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 123)
+        {
+            if(resultCode == RESULT_OK) {
+                String token = data.getStringExtra("token");
+                SharedPreferences.Editor edit = mPreferences.edit();
+                edit.putString("access_token", token);
+                edit.commit();
+                Log.e("MainActivity", "result received " + token);
+            }
+        }
     }
 }
