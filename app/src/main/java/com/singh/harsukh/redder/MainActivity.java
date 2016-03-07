@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -118,7 +119,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 123)
         {
             if(resultCode == RESULT_OK) {
@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity
                 SharedPreferences.Editor edit = mPreferences.edit();
                 edit.putString("access_token", token);
                 edit.commit();
+                Log.e("MainActivity", "result received " + token);
             }
         }
     }

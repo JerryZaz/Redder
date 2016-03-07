@@ -1,5 +1,6 @@
 package com.singh.harsukh.redder;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +11,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -32,10 +34,9 @@ public class AccessActivity extends AppCompatActivity {
     private static final String OAUTH_URL ="https://www.reddit.com/api/v1/"+TOKEN_URL;
     private static final String OAUTH_SCOPE="mysubreddits";
     private static final String DURATION = "permanent";
-
     private WebView mWebView;
     private static final String DEVICE_ID = UUID.randomUUID().toString();
-
+    private static String ACCESS_TOKEN = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,18 +109,14 @@ public class AccessActivity extends AppCompatActivity {
                 {
                     final String check = uri.getQueryParameter("state");
                     final String code = uri.getQueryParameter("code");
-                    System.out.println("code: "+code);
+                    System.out.println("code: " + code);
                     //now make the POST request
-                    String token = new RedditRCModel().getToken(OAUTH_URL, GRANT_TYPE2, DEVICE_ID, CLIENT_ID,
-                            CLIENT_SECRET,  REDIRECT_URI, code);
-                    if(token != null)
-                    {
-                        Intent intent = new Intent();
-                        intent.putExtra("token", token);
-                        setResult(RESULT_OK, intent);
-                        System.out.println(token);
-                        finish();
-                    }
+                    RedditRCModel model = new RedditRCModel();
+                    model.getToken(OAUTH_URL, GRANT_TYPE2, DEVICE_ID, CLIENT_ID,
+                            CLIENT_SECRET, REDIRECT_URI, code);
+                    TokenThread thread = new TokenThread();
+                    thread.start();
+                    Log.e("AccessActivity", "TOKEN IS NULL");
                 }
                 catch(NullPointerException f)
                 {
@@ -138,10 +135,45 @@ public class AccessActivity extends AppCompatActivity {
         return intent;
     }
 
+    //get token from http service
+    public static void setToken(String token)
+    {
+        ACCESS_TOKEN = token;
+    }
+
+    private  void finishAcitvity(String token)
+    {
+        Intent intent = new Intent();
+        intent.putExtra("token", token);
+        setResult(RESULT_OK, intent);
+        System.out.println(token);
+        this.finish();
+    }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) //disable orientation changing
     {
         super.onConfigurationChanged(newConfig);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
+
+    private class TokenThread extends Thread
+    {
+        @Override
+        public void run() {
+            while(ACCESS_TOKEN == null)
+            {
+
+                synchronized (this) {
+                    try {
+                        wait(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            finishAcitvity(ACCESS_TOKEN);
+        }
+    }
+
 }

@@ -1,11 +1,13 @@
 package com.singh.harsukh.redder.model;
 
+import android.app.Activity;
 import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.singh.harsukh.redder.AccessActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,6 +18,8 @@ import cz.msebera.android.httpclient.Header;
  * Created by harsukh on 3/6/16.
  */
 public class RedditRCModel {
+
+
     private static AsyncHttpClient client = new AsyncHttpClient();
     private static String access_token;
 
@@ -33,7 +37,7 @@ public class RedditRCModel {
         client.post(url, params, responseHandler);
     }
 
-    public String getToken(String relativeUrl,String grant_type,String device_id, String CLIENT_ID,
+    public void getToken(String relativeUrl,String grant_type,String device_id, String CLIENT_ID,
                            String CLIENT_SECRET, String REDIRECT_URI,String code) throws JSONException {
         client.setBasicAuth(CLIENT_ID, CLIENT_SECRET);
         RequestParams requestParams = new RequestParams();
@@ -48,7 +52,7 @@ public class RedditRCModel {
                 Log.i("response", response.toString());
                 try {
                     String token = response.getString("access_token").toString();
-                    setToken(token);
+                    AccessActivity.setToken(token);
                     Log.e("Access_token", token);
                 } catch (JSONException j) {
                     j.printStackTrace();
@@ -57,10 +61,9 @@ public class RedditRCModel {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
                 Log.e("statusCode", "" + statusCode);
             }
         });
-        return access_token;
     }
+
 }
