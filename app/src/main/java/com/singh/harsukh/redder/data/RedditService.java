@@ -3,16 +3,16 @@ package com.singh.harsukh.redder.data;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.singh.harsukh.redder.BuildConfig;
-import com.singh.harsukh.redder.model.Listing;
 import com.singh.harsukh.redder.model.Reddit.RedditListing;
 import com.singh.harsukh.redder.model.Reddit.RedditObject;
 import com.singh.harsukh.redder.model.Reddit.RedditResponse;
-import com.singh.harsukh.redder.model.Thing;
 
 import org.joda.time.DateTime;
 
 import java.util.List;
 
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.GsonConverterFactory;
 import retrofit2.Retrofit;
@@ -42,7 +42,7 @@ public interface RedditService {
      * @return t1
      */
     @GET("api/info.json")
-    Call<Listing> fetchComment(
+    Call<RedditResponse<RedditListing>> fetchComment(
             @Query("id") String name
     );
 
@@ -53,7 +53,7 @@ public interface RedditService {
      * @return t3 things
      */
     @GET("r/{subreddit}/search.json")
-    Call<Thing> searchListingsWithQueryParam(
+    Call<RedditResponse<RedditListing>> searchListingsWithQueryParam(
             @Path("subreddit") String subreddit,
             @Query("q") String queryParam
     );
@@ -65,7 +65,7 @@ public interface RedditService {
      * @return
      */
     @GET("r/{subreddit}/search.json")
-    Call<Listing> searchListingsWithQueryParamAndSort(
+    Call<RedditResponse<RedditListing>> searchListingsWithQueryParamAndSort(
             @Query("q") String queryParam,
             @Query("sort") String sortOrder
     );
@@ -81,7 +81,17 @@ public interface RedditService {
         static Retrofit.Builder getBuilder(){
             return new Retrofit.Builder()
                     .baseUrl(BuildConfig.BASE_REDDIT_URL)
-                    .addConverterFactory(GsonConverterFactory.create(getGson()));
+                    .addConverterFactory(GsonConverterFactory.create(getGson()))
+                    .client(buildLogger());
+        }
+
+        static OkHttpClient buildLogger(){
+            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+
+            return new OkHttpClient
+                    .Builder()
+                    .addInterceptor(interceptor).build();
         }
 
         private static Gson getGson() {

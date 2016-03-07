@@ -1,15 +1,12 @@
 package com.singh.harsukh.redder.data;
 
 import com.singh.harsukh.redder.BuildConfig;
-import com.singh.harsukh.redder.model.Thing;
 
 import junit.framework.TestCase;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
 import retrofit2.GsonConverterFactory;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 
 /**
@@ -144,7 +141,7 @@ public class RedditAPITest extends TestCase {
         return BuildConfig.BASE_REDDIT_URL + "/api/info.json?id=" + name;
     }
 
-    public void testSearchListingsWithQueryParam(String searchQuery) throws Exception {
+    /*public void testSearchListingsWithQueryParam(String searchQuery) throws Exception {
 
         String subreddit = "pics";
 
@@ -164,7 +161,7 @@ public class RedditAPITest extends TestCase {
                 }
             }
         }
-    }
+    }*/
 
     public abstract static class BaseRetrofitImplementation {
         static Retrofit initRetrofit() {
