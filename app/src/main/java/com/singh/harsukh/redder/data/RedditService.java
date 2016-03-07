@@ -25,28 +25,6 @@ import retrofit2.http.Query;
  */
 public interface RedditService {
 
-    /**
-     * Retrieves a Listing object containing a List of Children that represent
-     * the top rated posts of the selected section
-     * @param subreddit the section to be queried
-     * @return Top rated t3 things tied to the t5 parameter
-     */
-    @GET("r/{subreddit}/.json")
-    Call<Listing> getPostsFromSubreddit(
-            @Path("subreddit") String subreddit
-    );
-
-    /**
-     * Same as getPostsFromSubreddit, this one using a different model class
-     * that picks up multimedia. A merge of both model classes to be considered
-     * @param subreddit the t5 to be queried
-     * @return top rated t3 things tied to the t5 param
-     */
-    @GET("r/{subreddit}.json")
-    Call<Thing> getPostsFromSubredditWithMedia(
-            @Path("subreddit") String subreddit
-    );
-
     @GET("r/{subreddit}.json")
     Call<RedditResponse<RedditListing>> getSubreddit(
             @Path("subreddit") String subreddit
