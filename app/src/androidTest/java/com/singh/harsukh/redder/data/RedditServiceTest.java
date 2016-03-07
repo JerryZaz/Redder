@@ -8,6 +8,7 @@ import com.singh.harsukh.redder.model.Reddit.RedditResponse;
 
 import junit.framework.TestCase;
 
+import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -19,8 +20,7 @@ import retrofit2.Response;
 public class RedditServiceTest extends TestCase {
 
     public void testGetSubreddit() throws Exception {
-        RedditService service = RedditService.Implementation.get();
-        Call<RedditResponse<RedditListing>> call = service.getSubreddit("android");
+        Call<RedditResponse<RedditListing>> call = RedditService.Implementation.get().getSubreddit("android");
         Response<RedditResponse<RedditListing>> response = call.execute();
         assertTrue(response.isSuccess());
 
@@ -53,6 +53,7 @@ public class RedditServiceTest extends TestCase {
     }
 
     public void testGetReplies(RedditComment comment){
+        //testFetchComment(comment);
         if(comment.getReplies() != null){
             RedditListing repliesListing = (RedditListing) comment.getReplies();
             for(RedditObject object : repliesListing.getChildren()){
@@ -70,6 +71,14 @@ public class RedditServiceTest extends TestCase {
                     testGetReplies(childComment);
                 }
             }
+        }
+    }
+
+    public void testFetchComment(RedditComment comment) {
+        try {
+            assertTrue(RedditService.Implementation.get().fetchComment(comment.getName()).execute().isSuccess());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
