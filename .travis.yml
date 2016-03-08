@@ -21,37 +21,30 @@ android:
 
     # Repositories for Gradle and Maven
     - extra-android-m2repository
-    #- extra-google-m2repository
 
     # Additional components
     - extra-android-support
-    #- extra-google-google_play_services
 
     # KitKat emulators
-        - android-19
-        - addon-google_apis-google-19 # System image, requires android-19, provides Google APIs
-        #- sys-img-armeabi-v7a-android-19 # System image, requires android-19
+    - android-19
+    - addon-google_apis-google-19 # System image, requires android-19, provides Google APIs
+    #- sys-img-armeabi-v7a-android-19 # System image, requires android-19
 
-  # Licenses are automatically accepted by Travis CI
-  licenses:
-    #- 'android-sdk-license-.+'
-    #- 'google-gdk-license-.+'
-
-  # Emulator Management: Create, Start and Wait
-  before_script:
-    - echo ANDROID_HOME=$ANDROID_HOME
-    - echo ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT
-    #- echo ********** Android SDKs **********
-    #- android list sdk --all --no-ui --extended
-    - echo ********** Android Targets **********
-    - android list target
-    #- echo no | android create avd --force --name test --target "Google Inc.:Google APIs:23" --abi "google_apis/armeabi-v7a"
-    #- echo no | android create avd --force --name test --target "android-23" --abi "default/armeabi-v7a"
-    - echo no | android create avd --force --name test --target "Google Inc.:Google APIs:19" --abi "default/armeabi-v7a"
-    #- echo no | android create avd --force --name test --target "android-19" --abi armeabi-v7a
-    - emulator -avd test -no-skin -no-audio -no-window &
-    - android-wait-for-emulator
-    - adb shell input keyevent 82
+# Emulator Management: Create, Start and Wait
+before_script:
+  - echo ANDROID_HOME=$ANDROID_HOME
+  - echo ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT
+  #- echo ********** Android SDKs **********
+  #- android list sdk --all --no-ui --extended
+  - echo ********** Android Targets **********
+  - android list target
+  #- echo no | android create avd --force --name test --target "Google Inc.:Google APIs:23" --abi "google_apis/armeabi-v7a"
+  #- echo no | android create avd --force --name test --target "android-23" --abi "default/armeabi-v7a"
+  - echo no | android create avd --force --name test --target "Google Inc.:Google APIs:19" --abi "default/armeabi-v7a"
+  #- echo no | android create avd --force --name test --target "android-19" --abi armeabi-v7a
+  - emulator -avd test -no-skin -no-audio -no-window &
+  - android-wait-for-emulator
+  - adb shell input keyevent 82
 
 script:
   - ./gradlew clean build connectedCheck -PdisablePreDex
