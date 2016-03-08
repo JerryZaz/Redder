@@ -1,5 +1,9 @@
 package com.singh.harsukh.redder.model;
 
+<<<<<<< HEAD
+=======
+import android.app.Activity;
+>>>>>>> b1499b41da3aa740a7bb973457bcf6f00426033b
 import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -22,6 +26,14 @@ public class RedditRCModel {
     private static AsyncHttpClient client = new AsyncHttpClient();
     private static String access_token;
 
+<<<<<<< HEAD
+=======
+    private void setToken(String token)
+    {
+        access_token = token;
+    }
+
+>>>>>>> b1499b41da3aa740a7bb973457bcf6f00426033b
     public static void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         client.get(url, params, responseHandler);
     }
@@ -31,11 +43,14 @@ public class RedditRCModel {
         client.post(url, params, responseHandler);
     }
 
+<<<<<<< HEAD
     private void setToken(String token)
     {
         access_token = token;
     }
 
+=======
+>>>>>>> b1499b41da3aa740a7bb973457bcf6f00426033b
     public void getToken(String relativeUrl,String grant_type,String device_id, String CLIENT_ID,
                            String CLIENT_SECRET, String REDIRECT_URI,String code) throws JSONException {
         client.setBasicAuth(CLIENT_ID, CLIENT_SECRET);

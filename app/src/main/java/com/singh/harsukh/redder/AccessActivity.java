@@ -1,14 +1,26 @@
 package com.singh.harsukh.redder;
 
+<<<<<<< HEAD
 import android.content.Context;
 import android.content.Intent;
+=======
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+>>>>>>> b1499b41da3aa740a7bb973457bcf6f00426033b
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
+<<<<<<< HEAD
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+=======
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+>>>>>>> b1499b41da3aa740a7bb973457bcf6f00426033b
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
@@ -32,9 +44,62 @@ public class AccessActivity extends AppCompatActivity {
     private static final String OAUTH_URL ="https://www.reddit.com/api/v1/"+TOKEN_URL;
     private static final String OAUTH_SCOPE="mysubreddits";
     private static final String DURATION = "permanent";
+<<<<<<< HEAD
     private static final String DEVICE_ID = UUID.randomUUID().toString();
     private static String ACCESS_TOKEN = null;
     private WebView mWebView;
+=======
+    private WebView mWebView;
+    private static final String DEVICE_ID = UUID.randomUUID().toString();
+    private static String ACCESS_TOKEN = null;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_access);
+        mWebView = (WebView) findViewById(R.id.webview); //get access to the webview
+        mWebView.clearCache(true); //clear the cache
+        mWebView.getSettings().setJavaScriptEnabled(true);//enable javascript
+        mWebView.getSettings().setBuiltInZoomControls(true);
+        mWebView.getSettings().setDisplayZoomControls(true);
+        mWebView.setWebViewClient(mWebViewClient);
+
+        startAuthorize();
+    }
+
+
+    private void startAuthorize()
+    {
+        (new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+        /*
+        This is the authorization url that is needed
+        https://www.reddit.com/api/v1/authorize?client_id=CLIENT_ID&response_type=TYPE&
+    state=RANDOM_STRING&redirect_uri=URI&duration=DURATION&scope=SCOPE_STRING
+         */
+                String RANDOM_STRING = "hgjnklmkiuy";
+                Uri.Builder builder = new Uri.Builder();
+                builder.scheme("https")
+                        .authority("www.reddit.com")
+                        .appendPath("api")
+                        .appendPath("v1")
+                        .appendPath("authorize")
+                        .appendQueryParameter("client_id", CLIENT_ID)
+                        .appendQueryParameter("response_type", "code")
+                        .appendQueryParameter("state", RANDOM_STRING);
+                String url= builder.build().toString()+"&redirect_uri=https://google.com&duration="+DURATION+"&scope="+OAUTH_SCOPE;
+                System.out.println(url);
+                return url;
+            }
+
+            @Override
+            protected void onPostExecute(String url) {
+                mWebView.loadUrl(url);
+            }
+        }).execute();
+    }
+
+>>>>>>> b1499b41da3aa740a7bb973457bcf6f00426033b
     private WebViewClient mWebViewClient = new WebViewClient(){
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -92,6 +157,7 @@ public class AccessActivity extends AppCompatActivity {
         ACCESS_TOKEN = token;
     }
 
+<<<<<<< HEAD
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,6 +204,8 @@ public class AccessActivity extends AppCompatActivity {
         }).execute();
     }
 
+=======
+>>>>>>> b1499b41da3aa740a7bb973457bcf6f00426033b
     private  void finishAcitvity(String token)
     {
         Intent intent = new Intent();
