@@ -1,6 +1,5 @@
 package com.singh.harsukh.redder.model;
 
-import android.app.Activity;
 import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -23,10 +22,6 @@ public class RedditRCModel {
     private static AsyncHttpClient client = new AsyncHttpClient();
     private static String access_token;
 
-    private void setToken(String token)
-    {
-        access_token = token;
-    }
 
     public static void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         client.get(url, params, responseHandler);
@@ -35,6 +30,11 @@ public class RedditRCModel {
     public static void post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
 
         client.post(url, params, responseHandler);
+    }
+
+    private void setToken(String token)
+    {
+        access_token = token;
     }
 
     public void getToken(String relativeUrl,String grant_type,String device_id, String CLIENT_ID,
