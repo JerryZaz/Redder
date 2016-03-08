@@ -37,4 +37,6 @@ dependencies {
     compile 'com.android.support:customtabs:23.2.0'
     compile 'me.zhanghai.android.customtabshelper:library:1.0.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'joda-time:joda-time:2.4'
+    compile 'com.loopj.android:android-async-http:1.4.9'
 }

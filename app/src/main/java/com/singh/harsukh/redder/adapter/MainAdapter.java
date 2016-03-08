@@ -10,26 +10,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.singh.harsukh.redder.R;
-import com.singh.harsukh.redder.model.Listing;
-import com.squareup.picasso.Picasso;
-
-import java.util.List;
 
 /**
  * Created by nano1 on 3/5/2016.
  */
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
-    private List<Listing.DataEntity.ChildrenEntity> childrenEntities;
+//    private List<Listing.DataEntity.ChildrenEntity> childrenEntities;
     private Context context;
     private LayoutInflater inflater;
     private ClickListener clickListener;
-
-    public MainAdapter(Context context, List<Listing.DataEntity.ChildrenEntity> childrenEntities) {
-        this.childrenEntities = childrenEntities;
-        this.context = context;
-        inflater = LayoutInflater.from(context);
-    }
+//
+//    public MainAdapter(Context context, List<Listing.DataEntity.ChildrenEntity> childrenEntities) {
+//        this.childrenEntities = childrenEntities;
+//        this.context = context;
+//        inflater = LayoutInflater.from(context);
+//    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -39,24 +35,24 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final Listing.DataEntity.ChildrenEntity  childrenEntity = childrenEntities.get(position);
-        String mUserName = trimUsername(childrenEntity.getData().getAuthor());
-
-        holder.mTextViewTitle.setText(childrenEntity.getData().getTitle());
-        holder.mTextViewUserName.setText(mUserName);
-
-        //int
-        holder.mTextViewScore.setText(String.valueOf(childrenEntity.getData().getScore()));
-        holder.mTextViewNumComments.setText(String.valueOf(childrenEntity.getData().getNum_comments()));
-        //holder.mTextViewTime.setText(String.valueOf(childrenEntity.getData().getCreated_utc()));
-
-        if (!childrenEntity.getData().getThumbnail().equals("")) {
-            Picasso.with(context)
-                    .load(childrenEntity.getData().getUrl())
-                    .resize(holder.mImageViewItem.getMeasuredWidth(), 500)
-                    .centerCrop()
-                    .into(holder.mImageViewItem);
-        }
+//        final Listing.DataEntity.ChildrenEntity  childrenEntity = childrenEntities.get(position);
+//        String mUserName = trimUsername(childrenEntity.getData().getAuthor());
+//
+//        holder.mTextViewTitle.setText(childrenEntity.getData().getTitle());
+//        holder.mTextViewUserName.setText(mUserName);
+//
+//        //int
+//        holder.mTextViewScore.setText(String.valueOf(childrenEntity.getData().getScore()));
+//        holder.mTextViewNumComments.setText(String.valueOf(childrenEntity.getData().getNum_comments()));
+//        //holder.mTextViewTime.setText(String.valueOf(childrenEntity.getData().getCreated_utc()));
+//
+//        if (!childrenEntity.getData().getThumbnail().equals("")) {
+//            Picasso.with(context)
+//                    .load(childrenEntity.getData().getUrl())
+//                    .resize(holder.mImageViewItem.getMeasuredWidth(), 500)
+//                    .centerCrop()
+//                    .into(holder.mImageViewItem);
+//        }
 
     }
 
@@ -66,7 +62,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-       return (null != childrenEntities ? childrenEntities.size() : 0);
+       return 0; // (null != childrenEntities ? childrenEntities.size() : 0);
     }
 
     public String trimUsername(String name){
@@ -77,15 +73,15 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         return name;
     }
 
-    public void swapList(List<Listing.DataEntity.ChildrenEntity> childrenEntities){
-        if (this.childrenEntities != null) {
-            this.childrenEntities.clear();
-            this.childrenEntities.addAll(childrenEntities);
-        }else{
-            this.childrenEntities = childrenEntities;
-        }
-        notifyDataSetChanged();
-    }
+//    public void swapList(List<Listing.DataEntity.ChildrenEntity> childrenEntities){
+//        if (this.childrenEntities != null) {
+//            this.childrenEntities.clear();
+//            this.childrenEntities.addAll(childrenEntities);
+//        }else{
+//            this.childrenEntities = childrenEntities;
+//        }
+//        notifyDataSetChanged();
+//    }
 
     public interface ClickListener{
         void itemClicked(View view, int position);
