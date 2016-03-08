@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<<<<<<< HEAD
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.singh.harsukh.redder">
-=======
-<manifest package="com.singh.harsukh.redder"
-          xmlns:android="http://schemas.android.com/apk/res/android">
->>>>>>> b1499b41da3aa740a7bb973457bcf6f00426033b
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
@@ -26,8 +21,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".AccessActivity"
-                  android:screenOrientation="portrait"
-                  android:configChanges="orientation">
+                  android:configChanges="orientation"
+                  android:screenOrientation="portrait">
         </activity>
     </application>
 

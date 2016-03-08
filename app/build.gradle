@@ -34,12 +34,9 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.0.0-RC1'
     compile 'com.squareup.okhttp3:logging-interceptor:3.0.0-RC1'
     compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta3'
-<<<<<<< HEAD
     compile 'com.android.support:customtabs:23.2.0'
     compile 'me.zhanghai.android.customtabshelper:library:1.0.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
-=======
->>>>>>> b1499b41da3aa740a7bb973457bcf6f00426033b
     compile 'joda-time:joda-time:2.4'
     compile 'com.loopj.android:android-async-http:1.4.9'
 }

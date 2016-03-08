@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.app.FragmentManager;
-<<<<<<< HEAD
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -14,10 +13,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
-=======
-import android.content.Intent;
-import android.content.SharedPreferences;
->>>>>>> b1499b41da3aa740a7bb973457bcf6f00426033b
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsCallback;
 import android.support.customtabs.CustomTabsClient;
@@ -72,8 +67,6 @@ public class MainActivity extends AppCompatActivity
         Bitmap icon = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
         builder.setActionButton(icon, "send email", pi);
     }
-
-    private SharedPreferences mPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,7 +187,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-<<<<<<< HEAD
     private CustomTabsSession getSession(){
         if (mClient == null) {
             mCustomTabsSession = null;
@@ -218,8 +210,6 @@ public class MainActivity extends AppCompatActivity
         customTabsIntent.launchUrl((Activity) context, Uri.parse(URL));
     }
 
-=======
->>>>>>> b1499b41da3aa740a7bb973457bcf6f00426033b
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == 123)
@@ -233,7 +223,6 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
-<<<<<<< HEAD
 
     private static class NavigationCallback extends CustomTabsCallback {
         @Override
@@ -242,6 +231,4 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-=======
->>>>>>> b1499b41da3aa740a7bb973457bcf6f00426033b
 }
