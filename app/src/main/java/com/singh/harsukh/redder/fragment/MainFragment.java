@@ -135,8 +135,10 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener{
 
     @Override
     public void itemClicked(View view, int position) {
+        String base = BuildConfig.BASE_REDDIT_URL;
         Toast.makeText(getActivity(),"Intent to Open Google Custom Tabs " + childrenEntities.get(position).getData().getAuthor(),Toast.LENGTH_SHORT).show();
-        ((MainActivity) getActivity()).customTab(childrenEntities.get(position).getData().getUrl(), getActivity());
+        ((MainActivity) getActivity()).customTab(base+childrenEntities.get(position).getData().getPermalink(), getActivity());
+
     }
 
     @Override
