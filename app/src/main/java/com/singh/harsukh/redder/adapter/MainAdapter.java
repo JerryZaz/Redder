@@ -1,7 +1,9 @@
 package com.singh.harsukh.redder.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,49 +12,59 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.singh.harsukh.redder.R;
+import com.singh.harsukh.redder.model.Reddit.RedditLink;
+import com.singh.harsukh.redder.model.Reddit.RedditListing;
+import com.singh.harsukh.redder.model.Reddit.RedditObject;
+import com.singh.harsukh.redder.model.Reddit.RedditObjectWrapper;
+import com.singh.harsukh.redder.model.Reddit.RedditResponse;
+import com.singh.harsukh.redder.model.Reddit.RedditSubmission;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by nano1 on 3/5/2016.
  */
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
-//    private List<Listing.DataEntity.ChildrenEntity> childrenEntities;
+    private List<RedditLink> mLinks;
     private Context context;
-    private LayoutInflater inflater;
+    //private LayoutInflater inflater;
     private ClickListener clickListener;
-//
-//    public MainAdapter(Context context, List<Listing.DataEntity.ChildrenEntity> childrenEntities) {
-//        this.childrenEntities = childrenEntities;
-//        this.context = context;
-//        inflater = LayoutInflater.from(context);
-//    }
+
+    public MainAdapter(Context context, List<RedditLink> links) {
+        this.mLinks = links;
+        this.context = context;
+        //inflater = LayoutInflater.from(context);
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.main_single_item, parent, false);
+        //View view = inflater.inflate(R.layout.main_single_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_single_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-//        final Listing.DataEntity.ChildrenEntity  childrenEntity = childrenEntities.get(position);
-//        String mUserName = trimUsername(childrenEntity.getData().getAuthor());
-//
-//        holder.mTextViewTitle.setText(childrenEntity.getData().getTitle());
-//        holder.mTextViewUserName.setText(mUserName);
-//
-//        //int
-//        holder.mTextViewScore.setText(String.valueOf(childrenEntity.getData().getScore()));
-//        holder.mTextViewNumComments.setText(String.valueOf(childrenEntity.getData().getNum_comments()));
-//        //holder.mTextViewTime.setText(String.valueOf(childrenEntity.getData().getCreated_utc()));
-//
-//        if (!childrenEntity.getData().getThumbnail().equals("")) {
-//            Picasso.with(context)
-//                    .load(childrenEntity.getData().getUrl())
-//                    .resize(holder.mImageViewItem.getMeasuredWidth(), 500)
-//                    .centerCrop()
-//                    .into(holder.mImageViewItem);
-//        }
+        final RedditLink link = mLinks.get(position);
+        String mUserName = trimUsername(link.getAuthor());
+
+        holder.mTextViewTitle.setText(link.getTitle());
+        holder.mTextViewUserName.setText(mUserName);
+        holder.mTextViewScore.setText(String.valueOf(link.getScore()));
+        holder.mTextViewNumComments.setText(String.valueOf(link.getNum_comments()));
+        //holder.mTextViewTime.setText(String.valueOf(childrenEntity.getData().getCreated_utc()));
+
+        if (!link.getThumbnail().equals("")) {
+            Picasso.with(context)
+                    .load(link.getUrl())
+                    .resize(holder.mImageViewItem.getMeasuredWidth(), 500)
+                    .centerCrop()
+                    .into(holder.mImageViewItem);
+        }
+        holder.itemView.setTag(link);
 
     }
 
@@ -62,7 +74,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-       return 0; // (null != childrenEntities ? childrenEntities.size() : 0);
+       return mLinks != null ? mLinks.size() : 0;
     }
 
     public String trimUsername(String name){
@@ -73,15 +85,15 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         return name;
     }
 
-//    public void swapList(List<Listing.DataEntity.ChildrenEntity> childrenEntities){
-//        if (this.childrenEntities != null) {
-//            this.childrenEntities.clear();
-//            this.childrenEntities.addAll(childrenEntities);
-//        }else{
-//            this.childrenEntities = childrenEntities;
-//        }
-//        notifyDataSetChanged();
-//    }
+    public void swapList(List<RedditLink> redditLinks){
+        if (mLinks != null) {
+            mLinks.clear();
+            mLinks.addAll(redditLinks);
+        }else{
+            mLinks = redditLinks;
+        }
+        notifyDataSetChanged();
+    }
 
     public interface ClickListener{
         void itemClicked(View view, int position);
@@ -112,7 +124,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             mImageViewItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context,"Open Image",Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context,"Open Image",Toast.LENGTH_SHORT).show();
 //                    Intent intent = new Intent(context, class);
 //                    intent.putExtra("image", childrenEntities.get(getPosition()));
 //                    context.startActivity(intent);
