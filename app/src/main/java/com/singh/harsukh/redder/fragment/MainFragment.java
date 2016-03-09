@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import com.singh.harsukh.redder.BuildConfig;
 import com.singh.harsukh.redder.MainActivity;
 import com.singh.harsukh.redder.R;
@@ -17,21 +18,16 @@ import com.singh.harsukh.redder.data.RedditService;
 import com.singh.harsukh.redder.model.Reddit.RedditLink;
 import com.singh.harsukh.redder.model.Reddit.RedditListing;
 import com.singh.harsukh.redder.model.Reddit.RedditObject;
-import com.singh.harsukh.redder.model.Reddit.RedditObjectWrapper;
 import com.singh.harsukh.redder.model.Reddit.RedditResponse;
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.GsonConverterFactory;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 /**
  * Created by nano1 on 3/5/2016.
@@ -74,7 +70,7 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener 
         recyclerView.refreshDrawableState();
 
         Bundle bundle = getArguments();
-        if(bundle != null){
+        if (bundle != null) {
             mSection = bundle.getString("title");
             if (mSection == null) {
                 mSection = "all";
@@ -134,8 +130,6 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener 
         );
 
     }
-
-
 
 
     @Override

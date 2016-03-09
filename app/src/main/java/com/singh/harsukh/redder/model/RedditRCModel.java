@@ -51,7 +51,7 @@ public class RedditRCModel {
                 // If the response is JSONObject instead of expected JSONArray
                 Log.i("response", response.toString());
                 try {
-                    String token = response.getString("access_token").toString();
+                    String token = response.getString("access_token");
                     AccessActivity.setToken(token);
                     Log.e("Access_token", token);
                 } catch (JSONException j) {

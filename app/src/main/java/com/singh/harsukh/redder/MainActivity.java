@@ -218,7 +218,7 @@ public class MainActivity extends AppCompatActivity
                 String token = data.getStringExtra("token");
                 SharedPreferences.Editor edit = mPreferences.edit();
                 edit.putString("access_token", token);
-                edit.commit();
+                edit.apply();
                 Log.e("MainActivity", "result received " + token);
             }
         }

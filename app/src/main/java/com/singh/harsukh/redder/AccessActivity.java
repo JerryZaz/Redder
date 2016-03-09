@@ -58,7 +58,6 @@ public class AccessActivity extends AppCompatActivity {
                 }
                 try
                 {
-                    final String check = uri.getQueryParameter("state");
                     final String code = uri.getQueryParameter("code");
                     System.out.println("code: " + code);
                     //now make the POST request
@@ -82,8 +81,7 @@ public class AccessActivity extends AppCompatActivity {
 
     public static Intent getIntent(Context context)
     {
-        Intent intent = new Intent(context, AccessActivity.class);
-        return intent;
+        return new Intent(context, AccessActivity.class);
     }
 
     //get token from http service

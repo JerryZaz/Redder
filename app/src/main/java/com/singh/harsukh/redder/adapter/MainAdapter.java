@@ -1,9 +1,7 @@
 package com.singh.harsukh.redder.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +11,8 @@ import android.widget.Toast;
 
 import com.singh.harsukh.redder.R;
 import com.singh.harsukh.redder.model.Reddit.RedditLink;
-import com.singh.harsukh.redder.model.Reddit.RedditListing;
-import com.singh.harsukh.redder.model.Reddit.RedditObject;
-import com.singh.harsukh.redder.model.Reddit.RedditObjectWrapper;
-import com.singh.harsukh.redder.model.Reddit.RedditResponse;
-import com.singh.harsukh.redder.model.Reddit.RedditSubmission;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -68,34 +60,34 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     }
 
-    public void setClickListener(ClickListener clickListener){
+    public void setClickListener(ClickListener clickListener) {
         this.clickListener = clickListener;
     }
 
     @Override
     public int getItemCount() {
-       return mLinks != null ? mLinks.size() : 0;
+        return mLinks != null ? mLinks.size() : 0;
     }
 
-    public String trimUsername(String name){
+    public String trimUsername(String name) {
 
-        if (name.length() > 10){
-            name = name.substring(0,7) + "...";
+        if (name.length() > 10) {
+            name = name.substring(0, 7) + "...";
         }
         return name;
     }
 
-    public void swapList(List<RedditLink> redditLinks){
+    public void swapList(List<RedditLink> redditLinks) {
         if (mLinks != null) {
             mLinks.clear();
             mLinks.addAll(redditLinks);
-        }else{
+        } else {
             mLinks = redditLinks;
         }
         notifyDataSetChanged();
     }
 
-    public interface ClickListener{
+    public interface ClickListener {
         void itemClicked(View view, int position);
     }
 
@@ -133,13 +125,13 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             mImageViewVoteUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context,"Login to Vote",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Login to Vote", Toast.LENGTH_SHORT).show();
                 }
             });
             mImageViewVoteDown.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context,"Login to Vote",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Login to Vote", Toast.LENGTH_SHORT).show();
                 }
             });
             mImageViewSave.setOnClickListener(new View.OnClickListener() {
@@ -154,8 +146,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
         @Override
         public void onClick(View v) {
-            if (clickListener!= null){
-                clickListener.itemClicked(v,getPosition());
+            if (clickListener != null) {
+                clickListener.itemClicked(v, getPosition());
             }
         }
     }
