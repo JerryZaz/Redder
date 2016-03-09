@@ -101,6 +101,9 @@ public class MainActivity extends AppCompatActivity
         fragmentManager.beginTransaction().replace(R.id.main_container, MainFragment.newInstance()).commit();
 
         mCustomTabActivityHelper = new CustomTabsActivityHelper();
+
+        mPreferences = getSharedPreferences("preferences", MODE_PRIVATE);
+        mPreferences.getString("access_token", "");
     }
 
     @Override
