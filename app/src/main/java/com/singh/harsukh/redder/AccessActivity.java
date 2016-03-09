@@ -136,7 +136,7 @@ public class AccessActivity extends AppCompatActivity {
         }).execute();
     }
 
-    private  void finishAcitvity(String token)
+    private  void finishActivity(String token)
     {
         Intent intent = new Intent();
         intent.putExtra("token", token);
@@ -167,7 +167,7 @@ public class AccessActivity extends AppCompatActivity {
                     }
                 }
             }
-            finishAcitvity(ACCESS_TOKEN);
+            finishActivity(ACCESS_TOKEN);
         }
     }
 
