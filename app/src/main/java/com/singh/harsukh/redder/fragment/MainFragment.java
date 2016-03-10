@@ -95,7 +95,6 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener 
     public void onResume() {
         super.onResume();
         ((MainActivity) getActivity()).setActionBarTitle(mSection);
-        //fetchData(mSection);
     }
 
     @Override
@@ -106,7 +105,6 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener 
     public void fetchData(String subreddit) {
         mLinks = new ArrayList<>();
         Call<RedditResponse<RedditListing>> call = RedditService.Implementation.get().getSubreddit(subreddit);
-
         call.enqueue(new Callback<RedditResponse<RedditListing>>() {
                          @Override
                          public void onResponse(Response<RedditResponse<RedditListing>> response) {
@@ -115,7 +113,6 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener 
                              mRedditObjects = mRedditListing.getData().getChildren();
                              for (RedditObject child : mRedditObjects) {
                                  RedditLink link = (RedditLink) child;
-
                                  mLinks.add(link);
                              }
                              mainAdapter.swapList(mLinks);
@@ -126,18 +123,15 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener 
 
                          }
                      }
-
         );
 
     }
-
 
     @Override
     public void itemClicked(View view, int position) {
         String base = BuildConfig.BASE_REDDIT_URL;
         Toast.makeText(getActivity(), "Intent to Open Google Custom Tabs " + mLinks.get(position).getAuthor(), Toast.LENGTH_SHORT).show();
         ((MainActivity) getActivity()).customTab(base + mLinks.get(position).getPermalink(), getActivity());
-
     }
 
     @Override
@@ -172,7 +166,6 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener 
         }
 
         mainAdapter.notifyDataSetChanged();
-        //recyclerView.invalidateViews();
         recyclerView.refreshDrawableState();
         return false;
     }

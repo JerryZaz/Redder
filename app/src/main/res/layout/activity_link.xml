@@ -6,4 +6,10 @@
     android:layout_height="match_parent"
     tools:context="com.singh.harsukh.redder.LinkActivity">
 
+
+    <ImageView
+        android:id="@+id/image_pic"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center" />
 </FrameLayout>
