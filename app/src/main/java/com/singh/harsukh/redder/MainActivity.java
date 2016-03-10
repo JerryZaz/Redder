@@ -31,6 +31,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.singh.harsukh.redder.fragment.CustomDialogFragment;
 import com.singh.harsukh.redder.fragment.MainFragment;
 import com.singh.harsukh.redder.fragment.SectionsFragment;
 
@@ -174,6 +175,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
+            getFragmentManager().beginTransaction().add(new CustomDialogFragment(), "DIALOG").commit();
 
         } else if (id == R.id.nav_share) {
 

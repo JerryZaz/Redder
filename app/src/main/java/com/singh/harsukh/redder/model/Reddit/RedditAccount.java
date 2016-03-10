@@ -17,6 +17,22 @@ public class RedditAccount extends RedditObject {
     private String modhash;
     private String name;
     private boolean over_18;
+    public RedditAccount(int comment_karma, boolean has_mail, boolean has_mod_mail, boolean has_verified_email,
+                         String id, boolean is_friend, boolean is_gold, boolean is_mod, int link_karma,
+                         String modhash, String name, boolean over_18) {
+        this.comment_karma = comment_karma;
+        this.has_mail = has_mail;
+        this.has_mod_mail = has_mod_mail;
+        this.has_verified_email = has_verified_email;
+        this.id = id;
+        this.is_friend = is_friend;
+        this.is_gold = is_gold;
+        this.is_mod = is_mod;
+        this.link_karma = link_karma;
+        this.modhash = modhash;
+        this.name = name;
+        this.over_18 = over_18;
+    }
 
     public int getComment_karma() {
         return comment_karma;
