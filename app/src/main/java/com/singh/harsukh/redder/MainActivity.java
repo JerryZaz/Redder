@@ -5,8 +5,10 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.app.FragmentManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +16,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.customtabs.CustomTabsCallback;
 import android.support.customtabs.CustomTabsClient;
 import android.support.customtabs.CustomTabsIntent;
@@ -114,11 +117,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy() {
-        mCustomTabActivityHelper.unbindCustomTabsService(this);
+        mCustomTabActivityHelper.unbindCustomTabsService(this); //this should be in onStop
         super.onDestroy();
 
-        mPreferences = getSharedPreferences("preferences", MODE_PRIVATE);
-        mPreferences.getString("access_token", "");
     }
 
     @Override
@@ -222,6 +223,9 @@ public class MainActivity extends AppCompatActivity
                 SharedPreferences.Editor edit = mPreferences.edit();
                 edit.putString("access_token", token);
                 edit.apply();
+                bindService(); //bind service here for refreshing
+                if(refresh_service != null)
+                    refresh_service.start_timer_task();
                 Log.e("MainActivity", "result received " + token);
             }
         }
@@ -234,4 +238,45 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private RefreshService refresh_service = null;
+    private static boolean status;
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            RefreshService.LocalBinder binder =(RefreshService.LocalBinder) service;
+            refresh_service = binder.getService();
+            status = true;
+            Log.e("MainActivity", "Service bonded successfully");
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            status = false;
+        }
+    };
+
+    public void bindService()
+    {
+        Intent local_intent = new Intent(this, RefreshService.class);
+        //the context flag is passed because if a service doesn't exist it is automatically created
+        bindService(local_intent, mServiceConnection, Context.BIND_AUTO_CREATE);
+        status = true;
+        Log.e("MainActivity", "binding complete");
+        if(refresh_service == null)
+            Log.e("MainActivity", "inside bindService", new Exception());
+        else
+            refresh_service.RefreshServiceIntializer(mPreferences, mPreferences.getString("access_token",""));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (status) {
+            unbindService(mServiceConnection);
+            status = false;
+            Log.e("MainActivity", "service un-binded", new Exception());
+        } else {
+            Log.e("MainActivity", "bind it first", new Exception());
+        }
+    }
 }

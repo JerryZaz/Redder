@@ -158,7 +158,6 @@ public class AccessActivity extends AppCompatActivity {
         public void run() {
             while(ACCESS_TOKEN == null)
             {
-
                 synchronized (this) {
                     try {
                         wait(100);
