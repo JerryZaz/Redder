@@ -1,12 +1,26 @@
 package com.singh.harsukh.redder.model.Reddit;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.joda.time.DateTime;
 
 /**
  * Created by Henry on 3/6/2016.
  */
 @SuppressWarnings("unused")
-public class RedditSubmission extends RedditObject {
+public class RedditSubmission extends RedditObject implements Parcelable {
+    public static final Creator<RedditSubmission> CREATOR = new Creator<RedditSubmission>() {
+        @Override
+        public RedditSubmission createFromParcel(Parcel in) {
+            return new RedditSubmission(in);
+        }
+
+        @Override
+        public RedditSubmission[] newArray(int size) {
+            return new RedditSubmission[size];
+        }
+    };
     private String banned_by;
     private String subreddit;
     private boolean saved;
@@ -19,6 +33,20 @@ public class RedditSubmission extends RedditObject {
     private String author_flair_text;
     private DateTime created_utc;
     private int ups;
+
+    protected RedditSubmission(Parcel in) {
+        banned_by = in.readString();
+        subreddit = in.readString();
+        saved = in.readByte() != 0;
+        id = in.readString();
+        gilded = in.readInt();
+        author = in.readString();
+        score = in.readInt();
+        name = in.readString();
+        created = in.readLong();
+        author_flair_text = in.readString();
+        ups = in.readInt();
+    }
 
     public int getUps() {
         return ups;
@@ -114,5 +142,25 @@ public class RedditSubmission extends RedditObject {
 
     public void setBanned_by(String banned_by) {
         this.banned_by = banned_by;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(banned_by);
+        dest.writeString(subreddit);
+        dest.writeByte((byte) (saved ? 1 : 0));
+        dest.writeString(id);
+        dest.writeInt(gilded);
+        dest.writeString(author);
+        dest.writeInt(score);
+        dest.writeString(name);
+        dest.writeLong(created);
+        dest.writeString(author_flair_text);
+        dest.writeInt(ups);
     }
 }

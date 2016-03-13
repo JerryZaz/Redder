@@ -1,6 +1,7 @@
 package com.singh.harsukh.redder.fragment;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,9 +9,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.singh.harsukh.redder.BuildConfig;
+import com.singh.harsukh.redder.LinkActivity;
 import com.singh.harsukh.redder.MainActivity;
 import com.singh.harsukh.redder.R;
 import com.singh.harsukh.redder.adapter.MainAdapter;
@@ -129,9 +129,12 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener 
 
     @Override
     public void itemClicked(View view, int position) {
-        String base = BuildConfig.BASE_REDDIT_URL;
-        Toast.makeText(getActivity(), "Intent to Open Google Custom Tabs " + mLinks.get(position).getAuthor(), Toast.LENGTH_SHORT).show();
-        ((MainActivity) getActivity()).customTab(base + mLinks.get(position).getPermalink(), getActivity());
+//        String base = BuildConfig.BASE_REDDIT_URL;
+//        Toast.makeText(getActivity(), "Intent to Open Google Custom Tabs " + mLinks.get(position).getAuthor(), Toast.LENGTH_SHORT).show();
+//        ((MainActivity) getActivity()).customTab(base + mLinks.get(position).getPermalink(), getActivity());
+        Intent intent = new Intent(getActivity(), LinkActivity.class);
+        intent.putExtra("subreddit", mLinks.get(position));
+        getActivity().startActivity(intent);
     }
 
     @Override

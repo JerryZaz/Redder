@@ -1,29 +1,43 @@
 package com.singh.harsukh.redder;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
+import com.singh.harsukh.redder.fragment.CommentsFragment;
+import com.singh.harsukh.redder.fragment.DetailFragment;
+import com.singh.harsukh.redder.fragment.ImageFragment;
+import com.singh.harsukh.redder.model.Reddit.RedditLink;
 
 public class LinkActivity extends AppCompatActivity {
-    ImageView mImage;
+
+    private RedditLink selectedLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_link);
-
-        mImage = (ImageView) findViewById(R.id.image_pic);
-
+        FragmentManager fragmentManager = getFragmentManager();
         Intent intent = getIntent();
-        String url = intent.getStringExtra("image");
+        String mUrl = intent.getStringExtra("image");
+        selectedLink = intent.getParcelableExtra("subreddit");
 
-        Picasso.with(getBaseContext())
-                .load(url)
-                .fit()
-                .centerCrop()
-                .into(mImage);
+        if (mUrl != null && !mUrl.isEmpty()) {
+            FragmentTransaction transaction = fragmentManager
+                    .beginTransaction();
+            transaction.replace(R.id.link_comments_container, ImageFragment.newInstance(mUrl, null), "newImage")
+                    .commit();
+        } else {
+            FragmentTransaction transaction = fragmentManager
+                    .beginTransaction();
+            transaction.replace(R.id.link_header_container, DetailFragment.newInstance(null, selectedLink), "newDetail");
+            transaction.replace(R.id.link_comments_container, CommentsFragment.newInstance(1, selectedLink), "newCom");
+            transaction.commit();
+        }
+
     }
+
+
 }

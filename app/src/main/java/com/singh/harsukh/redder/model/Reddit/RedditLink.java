@@ -1,10 +1,24 @@
 package com.singh.harsukh.redder.model.Reddit;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Henry on 3/6/2016.
  */
 @SuppressWarnings("unused")
-public class RedditLink extends RedditSubmission {
+public class RedditLink extends RedditSubmission implements Parcelable {
+    public static final Creator<RedditLink> CREATOR = new Creator<RedditLink>() {
+        @Override
+        public RedditLink createFromParcel(Parcel in) {
+            return new RedditLink(in);
+        }
+
+        @Override
+        public RedditLink[] newArray(int size) {
+            return new RedditLink[size];
+        }
+    };
     private String domain;
     private String selftext_html;
     private String selftext;
@@ -19,6 +33,48 @@ public class RedditLink extends RedditSubmission {
     private String title;
     private int num_comments;
     private boolean visited;
+
+    protected RedditLink(Parcel in) {
+        super(in);
+        domain = in.readString();
+        selftext_html = in.readString();
+        selftext = in.readString();
+        link_flair_text = in.readString();
+        clicked = in.readByte() != 0;
+        hidden = in.readByte() != 0;
+        thumbnail = in.readString();
+        is_self = in.readByte() != 0;
+        permalink = in.readString();
+        stickied = in.readByte() != 0;
+        url = in.readString();
+        title = in.readString();
+        num_comments = in.readInt();
+        visited = in.readByte() != 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeString(domain);
+        dest.writeString(selftext_html);
+        dest.writeString(selftext);
+        dest.writeString(link_flair_text);
+        dest.writeByte((byte) (clicked ? 1 : 0));
+        dest.writeByte((byte) (hidden ? 1 : 0));
+        dest.writeString(thumbnail);
+        dest.writeByte((byte) (is_self ? 1 : 0));
+        dest.writeString(permalink);
+        dest.writeByte((byte) (stickied ? 1 : 0));
+        dest.writeString(url);
+        dest.writeString(title);
+        dest.writeInt(num_comments);
+        dest.writeByte((byte) (visited ? 1 : 0));
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
     public String getDomain() {
         return domain;

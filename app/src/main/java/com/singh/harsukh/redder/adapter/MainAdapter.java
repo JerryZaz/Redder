@@ -37,17 +37,17 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         this.context = context;
     }
 
-    public static String getDiff(Date date){
+    public static String getDiff(Date date) {
         Date date2 = new Date();
-        long diff = getDateDiff(date,date2,TimeUnit.HOURS);
-        if (diff>24){
-            diff = getDateDiff(date,date2,TimeUnit.DAYS);
-            return String.valueOf(diff)+"d";
-        }else if (diff<1){
-            diff = getDateDiff(date,date2,TimeUnit.MINUTES);
-            return String.valueOf(diff)+"m";
-        }else {
-            return String.valueOf(diff)+"h";
+        long diff = getDateDiff(date, date2, TimeUnit.HOURS);
+        if (diff > 24) {
+            diff = getDateDiff(date, date2, TimeUnit.DAYS);
+            return String.valueOf(diff) + "d";
+        } else if (diff < 1) {
+            diff = getDateDiff(date, date2, TimeUnit.MINUTES);
+            return String.valueOf(diff) + "m";
+        } else {
+            return String.valueOf(diff) + "h";
         }
     }
 
@@ -64,7 +64,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         final RedditLink link = mLinks.get(position);
         String mUserName = trimUsername(link.getAuthor());
 
@@ -76,7 +76,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         Date date = dataTime.toDate();
         holder.mTextViewTime.setText(getDiff(date));
 
-        Log.v("image",link.getUrl());
+        Log.v("image", link.getUrl());
         if (!TextUtils.isEmpty(link.getThumbnail())) {
             Picasso.with(context).setIndicatorsEnabled(true);
             Picasso.with(context).setLoggingEnabled(true);
@@ -89,9 +89,9 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             holder.mImageViewItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context,"Open Image",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Open Image", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(context, LinkActivity.class);
-                    intent.putExtra("image", link.getUrl());
+                   intent.putExtra("image", link.getUrl());
                     context.startActivity(intent);
                 }
             });

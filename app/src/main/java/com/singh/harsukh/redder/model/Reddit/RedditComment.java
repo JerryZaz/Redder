@@ -1,10 +1,24 @@
 package com.singh.harsukh.redder.model.Reddit;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Henry on 3/6/2016.
  */
 @SuppressWarnings("unused")
-public class RedditComment extends RedditSubmission {
+public class RedditComment extends RedditSubmission implements Parcelable {
+    public static final Creator<RedditComment> CREATOR = new Creator<RedditComment>() {
+        @Override
+        public RedditComment createFromParcel(Parcel in) {
+            return new RedditComment(in);
+        }
+
+        @Override
+        public RedditComment[] newArray(int size) {
+            return new RedditComment[size];
+        }
+    };
     private RedditObject replies;
     private String subreddit_id;
     private String parent_id;
@@ -13,6 +27,34 @@ public class RedditComment extends RedditSubmission {
     private String body_html;
     private String link_id;
     private int depth;
+
+    protected RedditComment(Parcel in) {
+        super(in);
+        subreddit_id = in.readString();
+        parent_id = in.readString();
+        controversiality = in.readInt();
+        body = in.readString();
+        body_html = in.readString();
+        link_id = in.readString();
+        depth = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeString(subreddit_id);
+        dest.writeString(parent_id);
+        dest.writeInt(controversiality);
+        dest.writeString(body);
+        dest.writeString(body_html);
+        dest.writeString(link_id);
+        dest.writeInt(depth);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
     public RedditObject getReplies() {
         return replies;

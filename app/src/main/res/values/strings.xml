@@ -8,4 +8,7 @@
     <string name="action_sort_score">Sort by Score</string>
     <string name="action_sort_created">Sort by Time Created</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
