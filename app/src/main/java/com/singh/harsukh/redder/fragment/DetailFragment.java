@@ -91,7 +91,7 @@ public class DetailFragment extends Fragment {
         mTextViewUserName.setText(mParam2.getAuthor());
         mTextViewScore.setText(String.valueOf(mParam2.getScore()));
         mTextViewNumComments.setText(String.valueOf(mParam2.getNum_comments()));
-        // mTextViewTime.setText(String.valueOf(mParam2.getCreated_utc()));
+        mTextViewTime.setText(mParam2.getCreated_utc());
 
         if (mParam2.getPreview() != null) {
 

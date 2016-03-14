@@ -34,10 +34,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         holder.mItem = mValues.get(position);
         holder.mAuthor.setText(mValues.get(position).getAuthor());
         holder.mScore.setText(String.valueOf(mValues.get(position).getScore()));
-        //holder.mCreated.setText(String.valueOf(mValues.get(position).getCreated_utc()));
-
+        holder.mCreated.setText(mValues.get(position).getCreated_utc());
         holder.mComment.setText(mValues.get(position).getBody());
-
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
