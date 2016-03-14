@@ -4,7 +4,6 @@ import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +32,7 @@ public class DetailFragment extends Fragment {
     TextView mTextViewScore;
     TextView mTextViewNumComments;
     TextView mTextViewTime;
-    ImageView mImageViewItem;
+    ImageView mImageView;
     ImageView mImageViewVoteUp;
     ImageView mImageViewVoteDown;
     ImageView mImageViewSave;
@@ -78,13 +77,12 @@ public class DetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
-
         mTextViewTitle = (TextView) view.findViewById(R.id.text_detail_title);
         mTextViewUserName = (TextView) view.findViewById(R.id.text_detail_username);
         mTextViewScore = (TextView) view.findViewById(R.id.text_detail_score);
         mTextViewNumComments = (TextView) view.findViewById(R.id.text_detail_comments);
         mTextViewTime = (TextView) view.findViewById(R.id.text_detail_time);
-        mImageViewItem = (ImageView) view.findViewById(R.id.image_detail_item);
+        mImageView = (ImageView) view.findViewById(R.id.image_detail_item);
         mImageViewVoteUp = (ImageView) view.findViewById(R.id.image_detail_vote_up);
         mImageViewVoteDown = (ImageView) view.findViewById(R.id.image_detail_vote_down);
         mImageViewSave = (ImageView) view.findViewById(R.id.image_detail_save);
@@ -94,10 +92,12 @@ public class DetailFragment extends Fragment {
         mTextViewScore.setText(String.valueOf(mParam2.getScore()));
         mTextViewNumComments.setText(String.valueOf(mParam2.getNum_comments()));
         // mTextViewTime.setText(String.valueOf(mParam2.getCreated_utc()));
-        if (!TextUtils.isEmpty(mParam2.getThumbnail())) {
+
+        if (mParam2.getPreview() != null) {
+
             Picasso.with(getActivity())
-                    .load(mParam2.getThumbnail())
-                    .into(mImageViewItem);
+                    .load(mParam2.getPreview().getImages().get(0).getSource().getUrl())
+                    .into(mImageView);
         }
 
         // Inflate the layout for this fragment

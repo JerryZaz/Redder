@@ -1,6 +1,7 @@
 package com.singh.harsukh.redder.fragment;
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -68,14 +69,34 @@ public class ImageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_image, container, false);
         mImage = (ImageView) view.findViewById(R.id.image_pic);
 
-        Picasso.with(getActivity())
-                .load(mParam1)
-                .resize(4096,4096)
-                .centerInside()
-                .into(mImage);
+        loadImage();
 
         // Inflate the layout for this fragment
         return view;
+    }
+
+
+    private void loadImage() {
+
+        final ProgressDialog mProgressDialog = new ProgressDialog(getActivity());
+        mProgressDialog.setMessage("Loading...");
+        mProgressDialog.setIndeterminate(false);
+        mProgressDialog.show();
+        Picasso.with(getActivity())
+                .load(mParam1)
+                .into(mImage, new com.squareup.picasso.Callback() {
+
+                    @Override
+                    public void onSuccess() {
+                        mProgressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onError() {
+                        mProgressDialog.dismiss();
+                    }
+                });
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

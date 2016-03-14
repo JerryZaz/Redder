@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.singh.harsukh.redder.LinkActivity;
 import com.singh.harsukh.redder.MainActivity;
@@ -36,7 +37,7 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener 
 
     RedditResponse<RedditListing> mRedditListing;
     private List<RedditObject> mRedditObjects;
-    private List<RedditLink> mLinks;
+    private List<RedditLink> mRedditLinks;
     private MainAdapter mainAdapter;
     private RecyclerView recyclerView;
     private String mSection;
@@ -61,22 +62,22 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_main, container, false);
-
         recyclerView = (RecyclerView) layout.findViewById(R.id.main_recycleView);
-        mainAdapter = new MainAdapter(getActivity(), mLinks);
-        mainAdapter.setClickListener(this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(mainAdapter);
-        recyclerView.refreshDrawableState();
 
         Bundle bundle = getArguments();
-        if (bundle != null) {
-            mSection = bundle.getString("title");
-            if (mSection == null) {
-                mSection = "all";
-            }
-            fetchData(mSection);
+        if (bundle.isEmpty()) {
+            mSection = "all";
         }
+        else{
+            mSection = bundle.getString("title");
+        }
+
+        mainAdapter = new MainAdapter(getActivity());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(mainAdapter);
+        fetchData(mSection);
+        mainAdapter.notifyDataSetChanged();
+        recyclerView.refreshDrawableState();
 
         return layout;
     }
@@ -94,6 +95,7 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener 
     @Override
     public void onResume() {
         super.onResume();
+        mainAdapter.setClickListener(this);
         ((MainActivity) getActivity()).setActionBarTitle(mSection);
     }
 
@@ -102,8 +104,8 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener 
         super.onDestroyView();
     }
 
-    public void fetchData(String subreddit) {
-        mLinks = new ArrayList<>();
+    private void fetchData(String subreddit) {
+        mRedditLinks = new ArrayList<>();
         Call<RedditResponse<RedditListing>> call = RedditService.Implementation.get().getSubreddit(subreddit);
         call.enqueue(new Callback<RedditResponse<RedditListing>>() {
                          @Override
@@ -113,18 +115,17 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener 
                              mRedditObjects = mRedditListing.getData().getChildren();
                              for (RedditObject child : mRedditObjects) {
                                  RedditLink link = (RedditLink) child;
-                                 mLinks.add(link);
+                                 mRedditLinks.add(link);
                              }
-                             mainAdapter.swapList(mLinks);
+                             mainAdapter.swapList(mRedditLinks);
                          }
 
                          @Override
                          public void onFailure(Throwable t) {
-
+                             Toast.makeText(getActivity(),"Connection Failed",Toast.LENGTH_SHORT).show();
                          }
                      }
         );
-
     }
 
     @Override
@@ -133,17 +134,16 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener 
 //        Toast.makeText(getActivity(), "Intent to Open Google Custom Tabs " + mLinks.get(position).getAuthor(), Toast.LENGTH_SHORT).show();
 //        ((MainActivity) getActivity()).customTab(base + mLinks.get(position).getPermalink(), getActivity());
         Intent intent = new Intent(getActivity(), LinkActivity.class);
-        intent.putExtra("subreddit", mLinks.get(position));
+        intent.putExtra("subreddit", mRedditLinks.get(position));
         getActivity().startActivity(intent);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.action_sort_title:
-                Collections.sort(mLinks, new Comparator<RedditLink>() {
+                Collections.sort(mRedditLinks, new Comparator<RedditLink>() {
                     @Override
                     public int compare(RedditLink lhs, RedditLink rhs) {
                         return lhs.getTitle().compareTo(rhs.getTitle());
@@ -151,7 +151,7 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener 
                 });
                 break;
             case R.id.action_sort_score:
-                Collections.sort(mLinks, Collections.reverseOrder(new Comparator<RedditLink>() {
+                Collections.sort(mRedditLinks, Collections.reverseOrder(new Comparator<RedditLink>() {
                     @Override
                     public int compare(RedditLink lhs, RedditLink rhs) {
                         return lhs.getScore() - rhs.getScore();
@@ -159,7 +159,7 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener 
                 }));
                 break;
             case R.id.action_sort_created:
-                Collections.sort(mLinks, Collections.reverseOrder(new Comparator<RedditLink>() {
+                Collections.sort(mRedditLinks, Collections.reverseOrder(new Comparator<RedditLink>() {
                     @Override
                     public int compare(RedditLink lhs, RedditLink rhs) {
                         return Long.valueOf(lhs.getCreated()).compareTo(rhs.getCreated());

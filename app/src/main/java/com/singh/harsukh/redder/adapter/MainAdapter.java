@@ -2,9 +2,8 @@ package com.singh.harsukh.redder.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,16 +11,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.singh.harsukh.redder.LinkActivity;
 import com.singh.harsukh.redder.R;
 import com.singh.harsukh.redder.model.Reddit.RedditLink;
-import com.squareup.picasso.Picasso;
 
-import org.joda.time.DateTime;
-
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by nano1 on 3/5/2016.
@@ -32,28 +28,9 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     private Context context;
     private ClickListener clickListener;
 
-    public MainAdapter(Context context, List<RedditLink> links) {
-        this.mLinks = links;
+    public MainAdapter(Context context) {
+        this.mLinks = new ArrayList<>();
         this.context = context;
-    }
-
-    public static String getDiff(Date date) {
-        Date date2 = new Date();
-        long diff = getDateDiff(date, date2, TimeUnit.HOURS);
-        if (diff > 24) {
-            diff = getDateDiff(date, date2, TimeUnit.DAYS);
-            return String.valueOf(diff) + "d";
-        } else if (diff < 1) {
-            diff = getDateDiff(date, date2, TimeUnit.MINUTES);
-            return String.valueOf(diff) + "m";
-        } else {
-            return String.valueOf(diff) + "h";
-        }
-    }
-
-    public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
-        long diffInMillies = date2.getTime() - date1.getTime();
-        return timeUnit.convert(diffInMillies, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -64,39 +41,31 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
-        final RedditLink link = mLinks.get(position);
-        String mUserName = trimUsername(link.getAuthor());
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
 
-        holder.mTextViewTitle.setText(link.getTitle());
+        String mUserName = trimUsername(mLinks.get(position).getAuthor());
+        holder.mTextViewTitle.setText(mLinks.get(position).getTitle());
         holder.mTextViewUserName.setText(mUserName);
-        holder.mTextViewScore.setText(String.valueOf(link.getScore()));
-        holder.mTextViewNumComments.setText(String.valueOf(link.getNum_comments()));
-        DateTime dataTime = link.getCreated_utc();
-        Date date = dataTime.toDate();
-        holder.mTextViewTime.setText(getDiff(date));
+        holder.mTextViewScore.setText(String.valueOf(mLinks.get(position).getScore()));
+        holder.mTextViewNumComments.setText(String.valueOf(mLinks.get(position).getNum_comments()));
+        holder.mTextViewTime.setText(mLinks.get(position).getCreated_utc());
 
-        Log.v("image", link.getUrl());
-        if (!TextUtils.isEmpty(link.getThumbnail())) {
-            Picasso.with(context).setIndicatorsEnabled(true);
-            Picasso.with(context).setLoggingEnabled(true);
+        if (mLinks.get(position).getPreview() != null) {
 
-            Picasso.with(context)
-                    .load(link.getUrl())
-                    .resize(holder.mImageViewItem.getMeasuredWidth(), 500)
-                    .centerCrop()
-                    .into(holder.mImageViewItem);
-            holder.mImageViewItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(context, "Open Image", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(context, LinkActivity.class);
-                   intent.putExtra("image", link.getUrl());
-                    context.startActivity(intent);
-                }
-            });
+            String url = mLinks.get(position).getPreview().getImages().get(0).getSource().getUrl();
+            Uri uri = Uri.parse(url);
+            holder.mImageViewItem.setImageURI(uri);
         }
-        holder.itemView.setTag(link);
+        holder.mImageViewItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, LinkActivity.class);
+                intent.putExtra("image", mLinks.get(position).getPreview().getImages().get(0).getSource().getUrl());
+                context.startActivity(intent);
+            }
+        });
+
+        holder.itemView.setTag(mLinks);
     }
 
     public void setClickListener(ClickListener clickListener) {
@@ -136,7 +105,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         TextView mTextViewScore;
         TextView mTextViewNumComments;
         TextView mTextViewTime;
-        ImageView mImageViewItem;
+        SimpleDraweeView mImageViewItem;
         ImageView mImageViewVoteUp;
         ImageView mImageViewVoteDown;
         ImageView mImageViewSave;
@@ -148,7 +117,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             mTextViewScore = (TextView) itemView.findViewById(R.id.text_score);
             mTextViewNumComments = (TextView) itemView.findViewById(R.id.text_comments);
             mTextViewTime = (TextView) itemView.findViewById(R.id.text_time);
-            mImageViewItem = (ImageView) itemView.findViewById(R.id.image_item);
+            mImageViewItem = (SimpleDraweeView) itemView.findViewById(R.id.image_item);
             mImageViewVoteUp = (ImageView) itemView.findViewById(R.id.image_vote_up);
             mImageViewVoteDown = (ImageView) itemView.findViewById(R.id.image_vote_down);
             mImageViewSave = (ImageView) itemView.findViewById(R.id.image_save);
