@@ -5,9 +5,6 @@ import android.os.Parcelable;
 
 import org.joda.time.DateTime;
 
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
 /**
  * Created by Henry on 3/6/2016.
  */
@@ -51,29 +48,6 @@ public class RedditSubmission extends RedditObject implements Parcelable {
         ups = in.readInt();
     }
 
-    public static String getDiff(Date date) {
-        Date date2 = new Date();
-        long diff = getDateDiff(date, date2, TimeUnit.HOURS);
-        if (diff > 24) {
-            diff = getDateDiff(date, date2, TimeUnit.DAYS);
-            return String.valueOf(diff) + "d";
-        } else if (diff < 1) {
-            diff = getDateDiff(date, date2, TimeUnit.MINUTES);
-            if (diff < 1){
-                diff = getDateDiff(date,date2,TimeUnit.SECONDS);
-                return String.valueOf(diff) + "s";
-            }
-            return String.valueOf(diff) + "m";
-        } else {
-            return String.valueOf(diff) + "h";
-        }
-    }
-
-    public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
-        long diffInMillies = date2.getTime() - date1.getTime();
-        return timeUnit.convert(diffInMillies, TimeUnit.MILLISECONDS);
-    }
-
     public int getUps() {
         return ups;
     }
@@ -82,10 +56,8 @@ public class RedditSubmission extends RedditObject implements Parcelable {
         this.ups = ups;
     }
 
-    public String getCreated_utc() {
-        DateTime dataTime = created_utc;
-        Date date = created_utc.toDate();
-        return getDiff(date);
+    public DateTime getCreated_utc() {
+        return created_utc;
     }
 
     public void setCreated_utc(DateTime created_utc) {

@@ -63,7 +63,6 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_main, container, false);
         recyclerView = (RecyclerView) layout.findViewById(R.id.main_recycleView);
-
         Bundle bundle = getArguments();
         if (bundle.isEmpty()) {
             mSection = "all";
@@ -72,7 +71,7 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener 
             mSection = bundle.getString("title");
         }
 
-        mainAdapter = new MainAdapter(getActivity());
+        mainAdapter = new MainAdapter(getActivity(),mRedditLinks);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(mainAdapter);
         fetchData(mSection);
@@ -130,9 +129,7 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener 
 
     @Override
     public void itemClicked(View view, int position) {
-//        String base = BuildConfig.BASE_REDDIT_URL;
-//        Toast.makeText(getActivity(), "Intent to Open Google Custom Tabs " + mLinks.get(position).getAuthor(), Toast.LENGTH_SHORT).show();
-//        ((MainActivity) getActivity()).customTab(base + mLinks.get(position).getPermalink(), getActivity());
+
         Intent intent = new Intent(getActivity(), LinkActivity.class);
         intent.putExtra("subreddit", mRedditLinks.get(position));
         getActivity().startActivity(intent);
@@ -172,5 +169,4 @@ public class MainFragment extends Fragment implements MainAdapter.ClickListener 
         recyclerView.refreshDrawableState();
         return false;
     }
-
 }

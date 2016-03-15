@@ -1,7 +1,6 @@
 package com.singh.harsukh.redder.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,11 +11,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.singh.harsukh.redder.LinkActivity;
+import com.singh.harsukh.redder.MainActivity;
 import com.singh.harsukh.redder.R;
 import com.singh.harsukh.redder.model.Reddit.RedditLink;
+import com.singh.harsukh.redder.utils.Utilities;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,8 +28,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     private Context context;
     private ClickListener clickListener;
 
-    public MainAdapter(Context context) {
-        this.mLinks = new ArrayList<>();
+    public MainAdapter(Context context, List<RedditLink> mLinks) {
+        this.mLinks = mLinks;
         this.context = context;
     }
 
@@ -48,23 +48,22 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         holder.mTextViewUserName.setText(mUserName);
         holder.mTextViewScore.setText(String.valueOf(mLinks.get(position).getScore()));
         holder.mTextViewNumComments.setText(String.valueOf(mLinks.get(position).getNum_comments()));
-        holder.mTextViewTime.setText(mLinks.get(position).getCreated_utc());
+        Date date = mLinks.get(position).getCreated_utc().toDate();
+        holder.mTextViewTime.setText(Utilities.getDiff(date));
 
         if (mLinks.get(position).getPreview() != null) {
 
-            String url = mLinks.get(position).getPreview().getImages().get(0).getSource().getUrl();
+            final String url = mLinks.get(position).getPreview().getImages().get(0).getSource().getUrl();
             Uri uri = Uri.parse(url);
             holder.mImageViewItem.setImageURI(uri);
-        }
-        holder.mImageViewItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, LinkActivity.class);
-                intent.putExtra("image", mLinks.get(position).getPreview().getImages().get(0).getSource().getUrl());
-                context.startActivity(intent);
-            }
-        });
 
+            holder.mImageViewItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((MainActivity)context).customTab(url, context);
+                }
+            });
+        }
         holder.itemView.setTag(mLinks);
     }
 
@@ -110,7 +109,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         ImageView mImageViewVoteDown;
         ImageView mImageViewSave;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(final View itemView) {
             super(itemView);
             mTextViewTitle = (TextView) itemView.findViewById(R.id.text_title);
             mTextViewUserName = (TextView) itemView.findViewById(R.id.text_username);
@@ -121,7 +120,6 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             mImageViewVoteUp = (ImageView) itemView.findViewById(R.id.image_vote_up);
             mImageViewVoteDown = (ImageView) itemView.findViewById(R.id.image_vote_down);
             mImageViewSave = (ImageView) itemView.findViewById(R.id.image_save);
-
 
             mImageViewVoteUp.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -144,6 +142,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
             itemView.setOnClickListener(this);
         }
+
 
         @Override
         public void onClick(View v) {

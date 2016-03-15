@@ -46,7 +46,19 @@
         android:id="@+id/text_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
+        android:layout_marginBottom="@dimen/text_margin"
+        android:layout_marginLeft="@dimen/text_margin"
+        android:layout_marginRight="@dimen/text_margin"
         android:text="Comment"
         android:textAppearance="?attr/textAppearanceListItem" />
+
+    <TextView
+        android:id="@+id/text_subcomment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/text_margin"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="@dimen/text_margin"
+        android:text="SubComment"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 </LinearLayout>

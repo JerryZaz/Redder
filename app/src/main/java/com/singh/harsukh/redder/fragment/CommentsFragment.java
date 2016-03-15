@@ -26,12 +26,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
- */
 public class CommentsFragment extends Fragment {
 
     // TODO: Customize parameter argument names
@@ -40,8 +34,6 @@ public class CommentsFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private RedditLink mParam2;
-
-    private OnListFragmentInteractionListener mListener;
     private List<RedditObject> mRedditObjects;
     private List<RedditComment> mComments;
     private List<RedditResponse<RedditListing>> mRedditList;
@@ -80,7 +72,7 @@ public class CommentsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_comment_list, container, false);
 
-        mCommentAdapter = new CommentAdapter(mComments,mListener);
+        mCommentAdapter = new CommentAdapter(mComments, getActivity());
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -96,23 +88,6 @@ public class CommentsFragment extends Fragment {
         return view;
     }
 
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
     public void fetchComments(String subreddit, String link_id) {
         mComments = new ArrayList<>();
@@ -139,18 +114,4 @@ public class CommentsFragment extends Fragment {
         });
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onListFragmentInteraction(RedditComment item);
-    }
 }

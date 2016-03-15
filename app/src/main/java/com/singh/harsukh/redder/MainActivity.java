@@ -39,7 +39,7 @@ import org.chromium.customtabsclient.CustomTabsActivityHelper;
 import org.chromium.customtabsclient.CustomTabsHelper;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener{
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     private CustomTabsClient mClient;
     private CustomTabsActivityHelper mCustomTabActivityHelper;
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity
     private SharedPreferences mPreferences;
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private static void prepareMenuItems(CustomTabsIntent.Builder builder,Context context) {
+    private static void prepareMenuItems(CustomTabsIntent.Builder builder, Context context) {
         Intent menuIntent = new Intent();
         menuIntent.setClass(context, MainActivity.class);
         // Optional animation configuration when the user clicks menu items.
@@ -181,9 +181,7 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
 
-        }
-        else if(id == R.id.nav_get_subreddits)
-        {
+        } else if (id == R.id.nav_get_subreddits) {
             Intent intent = AccessActivity.getIntent(this);
             startActivityForResult(intent, 123);
         }
@@ -192,10 +190,10 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private CustomTabsSession getSession(){
+    private CustomTabsSession getSession() {
         if (mClient == null) {
             mCustomTabsSession = null;
-        }else if (mCustomTabsSession == null) {
+        } else if (mCustomTabsSession == null) {
             mCustomTabsSession = mClient.newSession(new NavigationCallback());
         }
         return mCustomTabsSession;
@@ -204,8 +202,8 @@ public class MainActivity extends AppCompatActivity
     public void customTab(String URL, Context context) {
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder(getSession());
         builder.setToolbarColor(Color.BLUE).setShowTitle(true);
-        prepareMenuItems(builder,context);
-        prepareActionButton(builder,context);
+        prepareMenuItems(builder, context);
+        prepareActionButton(builder, context);
         builder.setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left);
         builder.setExitAnimations(context, R.anim.slide_in_left, R.anim.slide_out_right);
         builder.setCloseButtonIcon(
@@ -217,9 +215,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 123)
-        {
-            if(resultCode == RESULT_OK) {
+        if (requestCode == 123) {
+            if (resultCode == RESULT_OK) {
                 String token = data.getStringExtra("token");
                 SharedPreferences.Editor edit = mPreferences.edit();
                 edit.putString("access_token", token);
