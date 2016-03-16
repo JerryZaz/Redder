@@ -41,7 +41,14 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         DateTime dateTime = mValues.get(position).getCreated_utc();
         Date date = dateTime.toDate();
         holder.mCreated.setText(Utilities.getDiff(date));
-        holder.mComment.setText(mValues.get(position).getBody());
+
+        StringBuilder builder = new StringBuilder();
+        for(int i = 0; i < mValues.get(position).getDepth(); i++){
+            builder.append("#");
+        }
+        builder.append(mValues.get(position).getBody());
+
+        holder.mComment.setText(builder.toString());
 
         //holder.mSubComment.setText(mValues.get(position).getReplies());
 

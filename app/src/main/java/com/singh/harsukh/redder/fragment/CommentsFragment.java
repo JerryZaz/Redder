@@ -21,6 +21,7 @@ import com.singh.harsukh.redder.model.Reddit.RedditResponse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,12 +33,14 @@ public class CommentsFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     private static final String ARG_PARAM2 = "param2";
     // TODO: Customize parameters
-    private int mColumnCount = 1;
-    private RedditLink mParam2;
-    private List<RedditObject> mRedditObjects;
-    private List<RedditComment> mComments;
-    private List<RedditResponse<RedditListing>> mRedditList;
-    private CommentAdapter mCommentAdapter;
+    protected int mColumnCount = 1;
+    protected RedditLink mParam2;
+    protected List<RedditObject> mRedditObjects;
+    protected List<RedditComment> mComments;
+    protected List<RedditResponse<RedditListing>> mRedditList;
+    protected CommentAdapter mCommentAdapter;
+
+    private Vector<RedditComment> vComments;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -73,6 +76,7 @@ public class CommentsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_comment_list, container, false);
 
         mCommentAdapter = new CommentAdapter(mComments, getActivity());
+        vComments = new Vector<>();
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -100,10 +104,13 @@ public class CommentsFragment extends Fragment {
                 for (RedditObject child : mRedditObjects) {
                     if (child instanceof RedditComment) {
                         RedditComment comment = (RedditComment) child;
-                        mComments.add(comment);
+                        vComments.add(comment);
+                        getChildren(comment);
                     }
+                    mCommentAdapter.swapList(new ArrayList<>(vComments));
                 }
-                mCommentAdapter.swapList(mComments);
+
+
             }
 
             @Override
@@ -112,6 +119,20 @@ public class CommentsFragment extends Fragment {
             }
 
         });
+    }
+
+    private void getChildren(RedditComment comment) {
+        if(comment.getReplies() != null){
+            RedditListing repliesListing = (RedditListing) comment.getReplies();
+            for(RedditObject object : repliesListing.getChildren()){
+                if(object instanceof RedditComment){
+                    RedditComment childComment = (RedditComment) object;
+                    childComment.setDepth(comment.getDepth() + 1);
+                    vComments.add(childComment);
+                    getChildren(childComment);
+                }
+            }
+        }
     }
 
 }
