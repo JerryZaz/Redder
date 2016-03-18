@@ -53,7 +53,9 @@ public class RedditRCModel {
                 Log.i("response", response.toString());
                 try {
                     String token = response.getString("access_token");
+                    String refresh_token = response.getString("refresh_token");
                     AccessActivity.setToken(token);
+                    AccessActivity.setRefresh(refresh_token);
                     Log.e("Access_token", token);
                 } catch (JSONException j) {
                     j.printStackTrace();
@@ -67,14 +69,15 @@ public class RedditRCModel {
         });
     }
 
-    public void refreshToken(String token)
+    public void refreshToken(String token, String CLIENT_ID, String CLIENT_SECRET)
     {
-        client.setBasicAuth("ReMLibe7JwFH0Q", "");
+        client.setBasicAuth(CLIENT_ID, CLIENT_SECRET);
         String relative_url = "https://www.reddit.com/api/v1/access_token";
         String grant_type = "refresh_token";
         RequestParams requestParams = new RequestParams();
         requestParams.put("grant_type",grant_type);
         requestParams.put("refresh_token", token);
+        //requestParams.put("redirect_uri","https://google.com");
         post(relative_url, requestParams, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {

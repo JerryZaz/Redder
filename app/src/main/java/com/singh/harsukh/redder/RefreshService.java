@@ -7,6 +7,7 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.singh.harsukh.redder.model.RedditRCModel;
 
@@ -18,12 +19,14 @@ import java.util.Calendar;
 public class RefreshService extends Service {
 
     private static String access_token = null;
+    private static String refresh_token = null;
     private static SharedPreferences mPreferences;
     private static Handler mHandler = new Handler();
-    public void RefreshServiceIntializer(SharedPreferences preferences, String access_token)
+    public void initialize(SharedPreferences preferences, String access_token, String refresh_token)
     {
         mPreferences = preferences;
         this.access_token = access_token;
+        this.refresh_token = refresh_token;
     }
 
     private final IBinder mBinder = new LocalBinder();
@@ -41,16 +44,18 @@ public class RefreshService extends Service {
     public IBinder onBind(Intent intent) {
         return mBinder;
     }
+
     public void start_timer_task()
     {
         TimerThread thread = new TimerThread();
         thread.start();
+
     }
 
     public void refreshToken()
     {
         RedditRCModel model = new RedditRCModel();
-        model.refreshToken(access_token);
+        model.refreshToken(refresh_token, "ReMLibe7JwFH0Q", "");
         start_timer_task();
     }
 
@@ -73,11 +78,11 @@ public class RefreshService extends Service {
 
         @Override
         public void run() {
-            while((target_time - System.currentTimeMillis()) > 300000) //
+            while((target_time - System.currentTimeMillis()) > (300*1000)) //
             {
                 synchronized (this){
                     try {
-                        this.wait(240000);
+                        this.wait(240*1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -87,11 +92,10 @@ public class RefreshService extends Service {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
+                    Log.e("RefreshService", "refreshing with" + refresh_token);
                     refreshToken();
                 }
             });
         }
-
-
     }
 }

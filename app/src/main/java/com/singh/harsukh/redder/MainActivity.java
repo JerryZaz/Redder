@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        bindService(); //bind service here for refreshing
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.main_navigation_container, SectionsFragment.newInstance()).commit();
         fragmentManager.beginTransaction().replace(R.id.main_container, MainFragment.newInstance()).commit();
@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity
 
         mPreferences = getSharedPreferences("preferences", MODE_PRIVATE);
         mPreferences.getString("access_token", "");
+        mPreferences.getString("refresh_token", "");
     }
 
     @Override
@@ -118,6 +119,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         mCustomTabActivityHelper.unbindCustomTabsService(this); //this should be in onStop
+        if (status) {
+            unbindService(mServiceConnection);
+            status = false;
+            Log.e("MainActivity", "service un-binded", new Exception());
+        } else {
+            Log.e("MainActivity", "bind it first", new Exception());
+        }
         super.onDestroy();
 
     }
@@ -213,17 +221,19 @@ public class MainActivity extends AppCompatActivity
         CustomTabsHelper.addKeepAliveExtra(context, customTabsIntent.intent);
         customTabsIntent.launchUrl((Activity) context, Uri.parse(URL));
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == 123)
         {
             if(resultCode == RESULT_OK) {
                 String token = data.getStringExtra("token");
+                String refresh = data.getStringExtra("refresh");
+                Log.e("MainActivity", "access_token is: "+token+" refresh_token is: "+refresh );
                 SharedPreferences.Editor edit = mPreferences.edit();
                 edit.putString("access_token", token);
+                edit.putString("refresh_token", refresh);
                 edit.apply();
-                bindService(); //bind service here for refreshing
+                refresh_service.initialize(mPreferences, token, refresh);
                 if(refresh_service != null)
                     refresh_service.start_timer_task();
                 Log.e("MainActivity", "result received " + token);
@@ -255,28 +265,25 @@ public class MainActivity extends AppCompatActivity
         }
     };
 
+
     public void bindService()
     {
         Intent local_intent = new Intent(this, RefreshService.class);
         //the context flag is passed because if a service doesn't exist it is automatically created
         bindService(local_intent, mServiceConnection, Context.BIND_AUTO_CREATE);
         status = true;
-        Log.e("MainActivity", "binding complete");
         if(refresh_service == null)
-            Log.e("MainActivity", "inside bindService", new Exception());
-        else
-            refresh_service.RefreshServiceIntializer(mPreferences, mPreferences.getString("access_token",""));
+            Log.i("MainActivity", "inside bindService", new Exception());
+        else {
+            Log.e("MainActivity", "binding complete");
+        }
     }
+
 
     @Override
     protected void onStop() {
         super.onStop();
-        if (status) {
-            unbindService(mServiceConnection);
-            status = false;
-            Log.e("MainActivity", "service un-binded", new Exception());
-        } else {
-            Log.e("MainActivity", "bind it first", new Exception());
-        }
     }
+
+
 }
