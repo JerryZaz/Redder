@@ -38,6 +38,13 @@ public class AccessActivity extends AppCompatActivity {
     private WebView mWebView;
     private WebViewClient mWebViewClient = new WebViewClient(){
         @Override
+        public void onLoadResource(WebView view, String url) {
+            super.onLoadResource(view, url);
+            mWebView.loadUrl("javascript:document.getElementById(\"header\").setAttribute(\"style\",\"display:none;\");");
+            mWebView.loadUrl("javascript:document.getElementById(\"footer-parent\").setAttribute(\"style\",\"display:none;\");");
+        }
+
+        @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             if(url != null && url.startsWith(REDIRECT_URI)) //on redirect we want to do this
             {
