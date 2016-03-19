@@ -41,7 +41,7 @@ public class AccessActivity extends AppCompatActivity {
         public void onLoadResource(WebView view, String url) {
             super.onLoadResource(view, url);
             mWebView.loadUrl("javascript:document.getElementById(\"header\").setAttribute(\"style\",\"display:none;\");");
-            mWebView.loadUrl("javascript:document.getElementById(\"footer-parent\").setAttribute(\"style\",\"display:none;\");");
+            mWebView.loadUrl("javascript:document.getElementById(\"footer\").setAttribute(\"style\",\"display:none;\");");
         }
 
         @Override
