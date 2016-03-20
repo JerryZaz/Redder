@@ -18,6 +18,7 @@ import com.singh.harsukh.redder.model.Reddit.RedditLink;
 import com.singh.harsukh.redder.model.Reddit.RedditListing;
 import com.singh.harsukh.redder.model.Reddit.RedditObject;
 import com.singh.harsukh.redder.model.Reddit.RedditResponse;
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +82,9 @@ public class CommentsFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
+            recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(context)
+                    .size(5)
+                    .build());
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {

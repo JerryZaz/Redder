@@ -36,20 +36,25 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mAuthor.setText(mValues.get(position).getAuthor());
+
         holder.mScore.setText(String.valueOf(mValues.get(position).getScore()));
         DateTime dateTime = mValues.get(position).getCreated_utc();
         Date date = dateTime.toDate();
         holder.mCreated.setText(Utilities.getDiff(date));
 
-        StringBuilder builder = new StringBuilder();
+        StringBuilder builder, builder1;
+                builder = new StringBuilder();
+                builder1 = new StringBuilder();
+
         for(int i = 0; i < mValues.get(position).getDepth(); i++){
-            builder.append("#");
+            builder.append("-");
+            builder1.append("-");
         }
+        builder1.append(mValues.get(position).getAuthor());
         builder.append(mValues.get(position).getBody());
 
         holder.mComment.setText(builder.toString());
-
+        holder.mAuthor.setText(builder1.toString());
         //holder.mSubComment.setText(mValues.get(position).getReplies());
 
     }
@@ -76,7 +81,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         public final TextView mScore;
         public final TextView mCreated;
         public final TextView mComment;
-        public final TextView mSubComment;
         public RedditComment mItem;
 
         public ViewHolder(View view) {
@@ -86,7 +90,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             mScore = (TextView) view.findViewById(R.id.text_comm_score);
             mCreated = (TextView) view.findViewById(R.id.text_comm_created);
             mComment = (TextView) view.findViewById(R.id.text_comment);
-            mSubComment = (TextView) view.findViewById(R.id.text_subcomment);
         }
 
         @Override
