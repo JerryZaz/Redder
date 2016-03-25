@@ -34,6 +34,7 @@ public class AccessActivity extends AppCompatActivity {
     private static final String DURATION = "permanent";
     private static final String DEVICE_ID = UUID.randomUUID().toString();
     private static String ACCESS_TOKEN = null;
+    private static String REFRESH_TOKEN = null;
     private WebView mWebView;
     private WebViewClient mWebViewClient = new WebViewClient(){
         @Override
@@ -90,6 +91,12 @@ public class AccessActivity extends AppCompatActivity {
         ACCESS_TOKEN = token;
     }
 
+    //get token from http service
+    public static void setRefresh(String token)
+    {
+        REFRESH_TOKEN = token;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,10 +143,11 @@ public class AccessActivity extends AppCompatActivity {
         }).execute();
     }
 
-    private  void finishActivity(String token)
+    private  void finishActivity(String token, String refresh)
     {
         Intent intent = new Intent();
         intent.putExtra("token", token);
+        intent.putExtra("refresh", refresh);
         setResult(RESULT_OK, intent);
         System.out.println(token);
         this.finish();
@@ -156,9 +164,8 @@ public class AccessActivity extends AppCompatActivity {
     {
         @Override
         public void run() {
-            while(ACCESS_TOKEN == null)
+            while(ACCESS_TOKEN == null && REFRESH_TOKEN == null)
             {
-
                 synchronized (this) {
                     try {
                         wait(100);
@@ -167,7 +174,7 @@ public class AccessActivity extends AppCompatActivity {
                     }
                 }
             }
-            finishActivity(ACCESS_TOKEN);
+            finishActivity(ACCESS_TOKEN, REFRESH_TOKEN);
         }
     }
 
